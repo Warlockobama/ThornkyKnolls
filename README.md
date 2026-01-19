@@ -31,7 +31,7 @@ This repository contains three branches, each with a different implementation ap
 
 ---
 
-### 2. `test-html` - The Whimsical Notebook
+### 2. `notebook-site` - The Whimsical Notebook
 **Philosophy:** Delightful storytelling with playful interactions
 
 **Features:**
@@ -77,7 +77,7 @@ Each implementation requires a local web server:
 cd ThornkyKnolls
 
 # Switch to desired branch
-git checkout stacked-site    # or test-html, or hybrid-site
+git checkout stacked-site    # or notebook-site, or hybrid-site
 
 # Start local server
 python -m http.server 8000
@@ -88,12 +88,12 @@ python -m http.server 8000
 
 ### Specific Entry Points:
 - **stacked-site:** `http://localhost:8000/stacked-site/index.html`
-- **test-html:** `http://localhost:8000/test.html`
+- **notebook-site:** `http://localhost:8000/test.html`
 - **hybrid-site:** `http://localhost:8000/hybrid-site/index.html`
 
 ## 📊 Feature Comparison
 
-| Feature | stacked-site | test-html | hybrid-site |
+| Feature | stacked-site | notebook-site | hybrid-site |
 |---------|--------------|-----------|-------------|
 | **Dependencies** | None | HTMX, Tailwind | None |
 | **Animal Profiles** | ❌ | ✅ | ✅ |
@@ -111,7 +111,7 @@ python -m http.server 8000
 ### stacked-site
 Clean, professional interface inspired by modern portfolio sites. The stacked card metaphor provides a unique browsing experience that stands out from typical grid layouts.
 
-### test-html
+### notebook-site
 Warm, inviting notebook aesthetic that feels personal and handcrafted. Perfect for storytelling with charming animations and playful interactions.
 
 ### hybrid-site
@@ -155,7 +155,7 @@ ThornkyKnolls/
 
 Each implementation has its own detailed documentation:
 - **stacked-site:** See `stacked-site/README.md`
-- **test-html:** See `CLAUDE.md` for architecture details
+- **notebook-site:** See `CLAUDE.md` for architecture details
 - **hybrid-site:** See `hybrid-site/README.md` + `hybrid-site/ARCHITECTURE.md`
 
 ## 🌱 Adding Content
@@ -166,7 +166,7 @@ Different steps for each version - see individual README files
 
 ### Add a New Blog Post
 
-**test-html & hybrid-site:** Create post HTML file + update `data/posts.json`
+**notebook-site & hybrid-site:** Create post HTML file + update `data/posts.json`
 
 ## 🎯 Recommendations
 
@@ -175,7 +175,7 @@ Different steps for each version - see individual README files
 - Professional portfolio or showcase
 - You prefer zero dependencies
 
-**Choose test-html if:**
+**Choose notebook-site if:**
 - You want charm and whimsy
 - Content is king
 - You're comfortable with CDN dependencies

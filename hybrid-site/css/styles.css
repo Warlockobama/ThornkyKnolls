@@ -224,6 +224,19 @@ p {
 }
 
 /* ==================== Stacked Card Deck ==================== */
+.category-section {
+  margin-bottom: var(--space-3xl);
+}
+
+.category-title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-lg);
+  text-align: left;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
 .deck,
 .cards-grid {
   position: relative;

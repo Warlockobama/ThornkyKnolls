@@ -57,11 +57,19 @@
   }
 
   // ==================== Card Stacking ====================
-  function positionCards() {
-    const animals = state.animals;
+  function positionCards(category = null) {
+    // If category is specified, only position that category
+    // Otherwise position all animals
+    const animalsToPosition = category
+      ? state.animals.filter(a => a.category === category)
+      : state.animals;
 
-    animals.forEach((animal, idx) => {
-      const cardEl = document.querySelector(`[data-animal="${animal.id}"]`);
+    const deckSelector = category ? `#${category}-deck` : '.deck';
+    const deck = document.querySelector(deckSelector);
+    if (!deck) return;
+
+    animalsToPosition.forEach((animal, idx) => {
+      const cardEl = deck.querySelector(`[data-animal="${animal.id}"]`);
       if (!cardEl) return;
 
       const isActive = idx === 0;
@@ -96,7 +104,6 @@
     });
 
     // Update deck height
-    const deck = elements.animalsGrid;
     const activeCard = deck.querySelector('.card.is-active');
     if (deck && activeCard) {
       deck.style.height = `${activeCard.offsetHeight + 120}px`;
@@ -104,14 +111,30 @@
   }
 
   function handleCardClick(animalId) {
-    const cardIdx = state.animals.findIndex(a => a.id === animalId);
+    const animal = state.animals.find(a => a.id === animalId);
+    if (!animal) return;
 
-    // Move clicked card to front of array
-    const clickedAnimal = state.animals.splice(cardIdx, 1)[0];
-    state.animals.unshift(clickedAnimal);
+    const category = animal.category;
+    const categoryAnimals = state.animals.filter(a => a.category === category);
+    const cardIdx = categoryAnimals.findIndex(a => a.id === animalId);
 
-    // Reposition all cards
-    positionCards();
+    // Remove clicked animal from state.animals
+    const stateIdx = state.animals.findIndex(a => a.id === animalId);
+    state.animals.splice(stateIdx, 1);
+
+    // Find first animal of this category in state.animals
+    const firstCategoryIdx = state.animals.findIndex(a => a.category === category);
+
+    // Insert clicked animal at the beginning of its category
+    if (firstCategoryIdx >= 0) {
+      state.animals.splice(firstCategoryIdx, 0, animal);
+    } else {
+      // No other animals of this category, add to end
+      state.animals.push(animal);
+    }
+
+    // Reposition cards in this category
+    positionCards(category);
 
     // Load detail content
     showAnimalDetail(animalId);
@@ -119,7 +142,12 @@
 
   // ==================== Rendering ====================
   function renderAnimalCards() {
-    const cardsHTML = state.animals.map(animal => {
+    // Separate animals by category
+    const cattle = state.animals.filter(a => a.category === 'cattle');
+    const equine = state.animals.filter(a => a.category === 'equine');
+
+    // Function to create card HTML
+    const createCardHTML = (animal) => {
       const imageContent = animal.thumb
         ? `<img src="${animal.thumb}" alt="${animal.name}" class="card-photo">`
         : `<div class="card-emoji">${animal.emoji}</div>`;
@@ -141,20 +169,38 @@
           </div>
         </article>
       `;
-    }).join('');
+    };
 
-    elements.animalsGrid.innerHTML = cardsHTML;
+    // Build sections HTML
+    const sectionsHTML = `
+      <div class="category-section">
+        <h2 class="category-title">Highland Cattle</h2>
+        <div class="deck" id="cattle-deck">
+          ${cattle.map(createCardHTML).join('')}
+        </div>
+      </div>
 
-    // Add click listeners
-    elements.animalsGrid.querySelectorAll('.card').forEach(card => {
+      <div class="category-section">
+        <h2 class="category-title">Horses & Equines</h2>
+        <div class="deck" id="equine-deck">
+          ${equine.map(createCardHTML).join('')}
+        </div>
+      </div>
+    `;
+
+    elements.animalsGrid.innerHTML = sectionsHTML;
+
+    // Add click listeners to all cards
+    document.querySelectorAll('.card[data-animal]').forEach(card => {
       card.addEventListener('click', () => {
         const animalId = card.dataset.animal;
         handleCardClick(animalId);
       });
     });
 
-    // Position cards initially
-    positionCards();
+    // Position cards for each category
+    positionCards('cattle');
+    positionCards('equine');
   }
 
   function renderStoryCards() {

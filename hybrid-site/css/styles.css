@@ -1,0 +1,627 @@
+/* Thorny Knolls Hybrid - Styles */
+/* Combining professional design with whimsical charm */
+
+/* ==================== CSS Custom Properties ==================== */
+:root {
+  /* Colors - Professional base with warm touches */
+  --bg-primary: #fdfbf7;
+  --bg-secondary: #f5f1e8;
+  --bg-card: #ffffff;
+  --text-primary: #2d2d2d;
+  --text-secondary: #6b6b6b;
+  --text-muted: #999999;
+  --accent-primary: #8b5cf6;
+  --accent-secondary: #c7df6a;
+  --accent-warm: #f59e0b;
+  --border-light: #e5e5e5;
+  --border-medium: #d4d4d4;
+  --shadow-sm: rgba(0, 0, 0, 0.05);
+  --shadow-md: rgba(0, 0, 0, 0.1);
+  --shadow-lg: rgba(0, 0, 0, 0.15);
+
+  /* Typography */
+  --font-heading: 'Abril Fatface', serif;
+  --font-body: Georgia, serif;
+  --font-hand: 'Patrick Hand', cursive;
+  --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Layout */
+  --max-width: 1400px;
+  --card-radius: 12px;
+  --transition-speed: 0.3s;
+}
+
+/* ==================== Reset & Base ==================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+
+a:hover {
+  color: var(--accent-warm);
+}
+
+/* ==================== Typography ==================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin-bottom: var(--space-md);
+}
+
+.text-hand {
+  font-family: var(--font-hand);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* ==================== Layout ==================== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.site-header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--space-lg) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px var(--shadow-sm);
+}
+
+.site-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--accent-primary);
+  margin: 0;
+}
+
+.site-subtitle {
+  font-family: var(--font-hand);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-top: var(--space-xs);
+}
+
+.main-nav {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+}
+
+.nav-link {
+  font-family: var(--font-system);
+  font-weight: 500;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--card-radius);
+  transition: all var(--transition-speed);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: var(--accent-primary);
+  color: white;
+}
+
+/* ==================== Cards ==================== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-xl);
+  padding: var(--space-2xl) 0;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 12px var(--shadow-md);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--shadow-lg);
+}
+
+.card-photo {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--border-light) 100%);
+}
+
+.card-emoji {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.card-content {
+  padding: var(--space-lg);
+}
+
+.card-title {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-sm);
+}
+
+.card-subtitle {
+  font-family: var(--font-system);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-md);
+}
+
+.card-tagline {
+  font-family: var(--font-hand);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.card-meta {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
+.tag {
+  font-size: 0.85rem;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-secondary);
+  border-radius: 999px;
+  color: var(--text-secondary);
+}
+
+/* ==================== Detail Panel ==================== */
+.detail-panel {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  max-width: 800px;
+  height: 100vh;
+  background: var(--bg-card);
+  box-shadow: -4px 0 24px var(--shadow-lg);
+  z-index: 200;
+  overflow-y: auto;
+  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.detail-panel.active {
+  right: 0;
+}
+
+.detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-speed);
+}
+
+.detail-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.detail-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  transition: all var(--transition-speed);
+}
+
+.close-btn:hover {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.detail-content {
+  padding: var(--space-2xl);
+}
+
+/* ==================== Animal Profile ==================== */
+.animal-portrait {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: var(--card-radius);
+  margin-bottom: var(--space-xl);
+}
+
+.animal-emoji-portrait {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: var(--card-radius);
+  margin-bottom: var(--space-xl);
+}
+
+.animal-name {
+  font-size: 3rem;
+  margin-bottom: var(--space-sm);
+}
+
+.animal-species {
+  font-family: var(--font-system);
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-xl);
+}
+
+.animal-bio {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: var(--space-xl);
+}
+
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  background: var(--bg-secondary);
+  padding: var(--space-xl);
+  border-radius: var(--card-radius);
+  margin-bottom: var(--space-xl);
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.fact-label {
+  font-family: var(--font-system);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.fact-value {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+/* ==================== Post List ==================== */
+.post-list {
+  margin-top: var(--space-2xl);
+}
+
+.post-list-title {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 2px solid var(--border-light);
+}
+
+.post-item {
+  padding: var(--space-lg);
+  border-left: 4px solid var(--accent-primary);
+  background: var(--bg-secondary);
+  margin-bottom: var(--space-md);
+  border-radius: var(--card-radius);
+  transition: all var(--transition-speed);
+  cursor: pointer;
+}
+
+.post-item:hover {
+  background: var(--bg-card);
+  box-shadow: 0 4px 12px var(--shadow-md);
+  transform: translateX(4px);
+}
+
+.post-title {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-sm);
+  color: var(--accent-primary);
+}
+
+.post-excerpt {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-sm);
+}
+
+.post-date {
+  font-family: var(--font-hand);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ==================== Blog Post ==================== */
+.post-header {
+  margin-bottom: var(--space-xl);
+}
+
+.post-date-large {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.post-title-large {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.post-featured {
+  font-family: var(--font-system);
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+}
+
+.post-content {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: var(--space-xl);
+}
+
+.post-content p {
+  margin-bottom: var(--space-lg);
+}
+
+.featured-animals {
+  background: var(--bg-secondary);
+  padding: var(--space-xl);
+  border-radius: var(--card-radius);
+  margin-top: var(--space-2xl);
+}
+
+.featured-animals h3 {
+  margin-bottom: var(--space-md);
+}
+
+.featured-animals ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.featured-animals li {
+  padding: var(--space-sm) 0;
+}
+
+.featured-animals a {
+  font-size: 1.1rem;
+  display: inline-block;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--card-radius);
+  transition: all var(--transition-speed);
+}
+
+.featured-animals a:hover {
+  background: var(--bg-card);
+}
+
+.post-signature {
+  font-family: var(--font-hand);
+  font-size: 1.5rem;
+  text-align: right;
+  color: var(--text-secondary);
+  margin-top: var(--space-2xl);
+}
+
+/* ==================== Theme Controls ==================== */
+.theme-controls {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  background: var(--bg-card);
+  padding: var(--space-md);
+  border-radius: var(--card-radius);
+  box-shadow: 0 4px 12px var(--shadow-lg);
+  z-index: 150;
+  max-width: 250px;
+}
+
+.theme-toggle {
+  background: var(--accent-primary);
+  color: white;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--card-radius);
+  font-family: var(--font-system);
+  font-weight: 500;
+  width: 100%;
+}
+
+.theme-panel {
+  margin-top: var(--space-md);
+  display: none;
+}
+
+.theme-panel.active {
+  display: block;
+}
+
+.theme-option {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.theme-label {
+  font-family: var(--font-system);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+  :root {
+    --space-xl: 1.5rem;
+    --space-2xl: 2rem;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .detail-panel {
+    max-width: 100%;
+  }
+
+  .detail-content {
+    padding: var(--space-lg);
+  }
+
+  .animal-name {
+    font-size: 2rem;
+  }
+
+  .animal-portrait,
+  .animal-emoji-portrait {
+    height: 300px;
+  }
+
+  .theme-controls {
+    bottom: var(--space-md);
+    right: var(--space-md);
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-title {
+    font-size: 1.5rem;
+  }
+
+  .main-nav {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .card-emoji {
+    font-size: 4rem;
+  }
+
+  .animal-emoji-portrait {
+    font-size: 8rem;
+    height: 250px;
+  }
+}
+
+/* ==================== Utilities ==================== */
+.hidden {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

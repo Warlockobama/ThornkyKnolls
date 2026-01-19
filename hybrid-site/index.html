@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thorny Knolls - A Farm Story Collection</title>
+  <meta name="description" content="Meet the animals and read stories from Thorny Knolls Farm">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title">Thorny Knolls</h1>
+      <p class="site-subtitle">Where every animal has a story</p>
+
+      <nav class="main-nav" role="navigation">
+        <a href="#animals" class="nav-link active" data-nav="animals">Our Animals</a>
+        <a href="#stories" class="nav-link" data-nav="stories">Farm Stories</a>
+        <a href="#about" class="nav-link" data-nav="about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Animals Section -->
+    <section id="animals-section" class="section">
+      <div class="cards-grid" id="animals-grid">
+        <!-- Animal cards will be inserted here by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Stories Section -->
+    <section id="stories-section" class="section hidden">
+      <div class="cards-grid" id="stories-grid">
+        <!-- Story cards will be inserted here by JavaScript -->
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about-section" class="section hidden">
+      <div class="detail-content">
+        <h2>About Thorny Knolls</h2>
+        <p>Welcome to Thorny Knolls, a small farm where Highland cows, donkeys, mules, and horses live together in harmony (most of the time). Each animal brings their own personality, quirks, and stories to the farm.</p>
+
+        <p>This site is a collection of profiles and tales from our daily life together. From morning chores to sunset shenanigans, there's never a dull moment when you have a farm full of characters.</p>
+
+        <p class="text-hand" style="font-size: 1.5rem; margin-top: 2rem;">~ The Farmer</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Detail Panel Overlay -->
+  <div class="detail-overlay" id="detailOverlay"></div>
+
+  <!-- Detail Panel -->
+  <aside class="detail-panel" id="detailPanel" role="dialog" aria-modal="true">
+    <div class="detail-header">
+      <h2 id="detailTitle"></h2>
+      <button class="close-btn" id="closeBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="detail-content" id="detailContent">
+      <!-- Content loaded dynamically -->
+    </div>
+  </aside>
+
+  <!-- Theme Controls -->
+  <div class="theme-controls">
+    <button class="theme-toggle" id="themeToggle">
+      Theme
+    </button>
+    <div class="theme-panel" id="themePanel">
+      <div class="theme-option">
+        <label class="theme-label" for="accentColor">Accent Color</label>
+        <input type="color" id="accentColor" value="#8b5cf6">
+      </div>
+      <div class="theme-option">
+        <label class="theme-label" for="bgColor">Background</label>
+        <input type="color" id="bgColor" value="#fdfbf7">
+      </div>
+    </div>
+  </div>
+
+  <!-- App JavaScript -->
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+.cache/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node (if added later)
+node_modules/
+package-lock.json
+
+# Build outputs (if added later)
+dist/
+build/
+
+# Environment
+.env
+.env.local
+
+# Large/unprocessed photo archives (keep optimized photos)
+selected-ranch-photos/
+selected-ranch-photos-curated/
+selected-ranch-photos-organized/
+screenshots/
+
+# Keep processed gallery photos
+!gallery/optimized/
+!gallery/thumbs/
+!gallery/raw/

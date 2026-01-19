@@ -1,0 +1,2207 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gradient-to-br from-yellow-50 via-amber-50 to-green-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Thorny Knolls – Where Every Animal Has a Story</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Abril+Fatface&family=Georgia&display=swap" rel="stylesheet">
+  <style>
+    .font-hand {
+      font-family: 'Patrick Hand', cursive;
+    }
+    .font-story {
+      font-family: 'Abril Fatface', serif;
+    }
+    .font-book {
+      font-family: 'Georgia', serif;
+    }
+    
+    /* Paper texture effect */
+    .paper-texture {
+      background-image: 
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 10px,
+          rgba(255,255,255,.05) 10px,
+          rgba(255,255,255,.05) 20px
+        ),
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 10px,
+          rgba(255,255,255,.03) 10px,
+          rgba(255,255,255,.03) 20px
+        );
+    }
+    
+    /* Notebook page effect */
+    .notebook-page {
+      position: relative;
+      background: linear-gradient(to right, #f9f9f9 0%, #fff 3%);
+      box-shadow: 
+        inset 0 0 40px rgba(0,0,0,0.05),
+        0 5px 20px rgba(0,0,0,0.1),
+        0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Spiral holes */
+    .spiral-hole {
+      width: 16px;
+      height: 16px;
+      background: radial-gradient(circle, #e5e5e5 0%, #d4d4d4 50%, transparent 50%);
+      border-radius: 70%;
+      position: relative;
+    }
+    
+    /* Mobile spiral holes */
+    @media (max-width: 640px) {
+      .spiral-hole {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    
+    .spiral-hole::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      background: #fafafa;
+      border-radius: 50%;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+    }
+    
+
+    
+    /* Subtle hover lift effect - desktop only */
+    @media (hover: hover) {
+      .hover-lift {
+        transition: all 0.3s ease;
+      }
+      
+      .hover-lift:hover:not(.expanding-card):not(.expanded-card) {
+        transform: translateY(-2px);
+        box-shadow: 
+          0 4px 12px rgba(0,0,0,0.1),
+          0 2px 4px rgba(0,0,0,0.08);
+      }
+    }
+    
+    /* Touch feedback for mobile */
+    @media (hover: none) {
+      .hover-lift:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+      }
+    }
+    
+    /* Subtle doodle hover effect */
+    .doodle-note {
+      transition: transform 0.3s ease;
+    }
+    
+    @media (hover: hover) {
+      .notebook-page:hover .doodle-note {
+        transform: rotate(calc(var(--rotation) + 3deg)) scale(1.05);
+      }
+    }
+    
+    /* Animal emoji animations */
+    @keyframes wink {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.3); }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+    }
+    
+    @keyframes flap {
+      0%, 100% { transform: scaleX(1); }
+      50% { transform: scaleX(1.2); }
+    }
+    
+    @keyframes snout {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    @keyframes hop {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(5deg); }
+    }
+    
+    .animal-emoji {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    
+    /* Animal animations - desktop only */
+    @media (hover: hover) {
+      .notebook-page:hover .cow-emoji {
+        animation: wink 0.6s ease-in-out;
+      }
+      
+      .notebook-page:hover .llama-emoji {
+        animation: wiggle 0.8s ease-in-out;
+      }
+      
+      .notebook-page:hover .cow2-emoji {
+        animation: bounce 0.6s ease-in-out;
+      }
+      
+      .notebook-page:hover .pig-emoji {
+        animation: snout 0.6s ease-in-out;
+      }
+      
+      .notebook-page:hover .rooster-emoji {
+        animation: flap 0.5s ease-in-out;
+      }
+      
+      .notebook-page:hover .owl-emoji {
+        animation: hop 0.6s ease-in-out;
+      }
+      
+      .notebook-page:hover .highland-emoji {
+        animation: bounce 0.7s ease-in-out;
+      }
+      
+      .notebook-page:hover .highland-young-emoji {
+        animation: hop 0.5s ease-in-out;
+      }
+      
+      .notebook-page:hover .donkey-emoji {
+        animation: wiggle 0.8s ease-in-out;
+      }
+      
+      .notebook-page:hover .mammoth-donkey-emoji {
+        animation: bounce 0.9s ease-in-out;
+      }
+      
+      .notebook-page:hover .willow-emoji {
+        animation: wink 0.7s ease-in-out;
+      }
+      
+      .notebook-page:hover .mule-emoji {
+        animation: hop 0.6s ease-in-out;
+      }
+      
+      .notebook-page:hover .horse-emoji {
+        animation: bounce 0.8s ease-in-out;
+      }
+    }
+    
+    /* Story text shadows */
+    .text-story-shadow {
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* In-place card expansion */
+    .expanding-card {
+      position: relative;
+      z-index: 10;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .expanded-card {
+      z-index: 20;
+      box-shadow: 
+        0 20px 60px rgba(0,0,0,0.3),
+        0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    /* Desktop: Centered large expansion for readability */
+    @media (min-width: 768px) {
+      .expanded-card {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) scale(2.2) !important;
+        z-index: 30;
+        max-width: 800px;
+        max-height: 90vh;
+        opacity: 1 !important;
+        overflow: hidden !important;
+        min-height: 300px !important;
+      }
+    }
+    
+    /* Mobile: Full screen expansion */
+    @media (max-width: 767px) {
+      .expanded-card {
+        position: fixed !important;
+        top: 5% !important;
+        left: 5% !important;
+        right: 5% !important;
+        bottom: 5% !important;
+        width: 90% !important;
+        height: 90% !important;
+        transform: none !important;
+        border-radius: 12px;
+        opacity: 1 !important;
+      }
+    }
+    
+    .story-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #ffffff !important;
+      transform-origin: right center;
+      transform: rotateY(180deg);
+      opacity: 0;
+      overflow: hidden;
+      backface-visibility: hidden;
+      border-radius: inherit;
+    }
+    
+    .story-view.opening {
+      animation: pageFlip 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    @keyframes pageFlip {
+      0% {
+        transform: rotateY(180deg);
+        opacity: 0;
+      }
+      50% {
+        transform: rotateY(90deg);
+        opacity: 0.5;
+      }
+      100% {
+        transform: rotateY(0deg);
+        opacity: 1;
+      }
+    }
+    
+    /* Hide original content during expansion */
+    .expanding-card .pl-8,
+    .expanding-card .pl-12 {
+      transition: opacity 0.6s ease;
+    }
+    
+    .expanded-card .pl-8,
+    .expanded-card .pl-12 {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    /* Ensure other cards fade but don't move - NEVER expanded cards */
+    .notebook-page.fade-out:not(.expanded-card):not(.expanding-card) {
+      opacity: 0.3;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+    
+    /* FINAL TRANSPARENCY FIX - MOST AGGRESSIVE */
+    .notebook-page.expanded-card,
+    .expanding-card.expanded-card,
+    .expanded-card,
+    .notebook-page.expanding-card,
+    .expanding-card,
+    .notebook-page.expanded-card.fade-out,
+    .notebook-page.expanding-card.fade-out,
+    .fade-out.expanded-card,
+    .fade-out.expanding-card {
+      opacity: 1 !important;
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+    }
+    
+    /* Override the card overlay z-index */
+    .card-overlay {
+      z-index: 5 !important;
+    }
+    
+    .expanded-card {
+      z-index: 50 !important;
+    }
+    
+    /* Fix all child elements */
+    .expanded-card *,
+    .expanding-card *,
+    .expanded-card .bg-gradient-to-r,
+    .expanding-card .bg-gradient-to-r {
+      background: #e5e7eb !important;
+      background-image: none !important;
+      opacity: 1 !important;
+    }
+    
+    /* Nuclear option for story view */
+    .story-view {
+      background: #ffffff !important;
+      background-image: none !important;
+      z-index: 60 !important;
+    }
+    
+    /* Ensure story view is also opaque */
+    .story-view {
+      background: linear-gradient(to right, #f9f9f9 0%, #fff 3%) !important;
+    }
+    
+    /* Story content in expanded card */
+    .story-content-wrapper {
+      height: 100%;
+      overflow-y: auto;
+      padding: 2rem 2rem 2rem 3rem;
+      background: 
+        linear-gradient(90deg, #ddd 0px, transparent 1px),
+        linear-gradient(to right, rgba(9, 119, 60, 0.05) 0%, transparent 5%);
+      background-size: 1px 100%, 100% 100%;
+      background-position: 40px 0, 0 0;
+      background-repeat: no-repeat;
+    }
+    
+    /* Journal entry styling */
+    .journal-entry {
+      font-family: 'Georgia', serif;
+      line-height: 1.6;
+      color: #374151;
+    }
+    
+    .journal-date {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.1rem;
+      color: #7c3aed;
+      margin-bottom: 1rem;
+      text-align: right;
+      font-style: italic;
+    }
+    
+    .journal-title {
+      font-family: 'Abril Fatface', serif;
+      font-size: 2rem;
+      color: #7c3aed;
+      margin-bottom: 0.5rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .journal-subtitle {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.2rem;
+      color: #a855f7;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+    
+    .journal-content {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .journal-content p {
+      margin-bottom: 1rem;
+      text-indent: 1.5rem;
+    }
+    
+    .journal-content p:first-child {
+      text-indent: 0;
+    }
+    
+    .journal-animal-portrait {
+      float: right;
+      font-size: 4rem;
+      margin: 0 0 1rem 1rem;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+    }
+    
+    .journal-facts {
+      background: rgba(168, 85, 247, 0.05);
+      border-left: 4px solid #a855f7;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    
+    .journal-facts h3 {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.3rem;
+      color: #7c3aed;
+      margin-bottom: 0.5rem;
+    }
+    
+    .journal-facts ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .journal-facts li {
+      font-family: 'Georgia', serif;
+      padding: 0.25rem 0;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+    
+    .journal-facts li:before {
+      content: '🌾';
+      position: absolute;
+      left: 0;
+      top: 0.25rem;
+    }
+    
+    .journal-signature {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.1rem;
+      color: #7c3aed;
+      text-align: right;
+      margin-top: 2rem;
+      font-style: italic;
+    }
+    
+    /* Handwritten doodles */
+    .journal-doodle {
+      position: absolute;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+    
+    .journal-doodle-1 {
+      top: 20%;
+      right: 10%;
+      transform: rotate(15deg);
+    }
+    
+    .journal-doodle-2 {
+      bottom: 20%;
+      left: 5%;
+      transform: rotate(-10deg);
+    }
+    
+    /* Enhanced spiral binding for expanded view */
+    .expanded-card .spiral-hole {
+      width: 20px;
+      height: 20px;
+      z-index: 20;
+    }
+    
+    /* Close button for expanded card */
+    .story-close-btn {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      width: 32px;
+      height: 32px;
+      background: white;
+      border: 2px solid #a855f7;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 60;
+      opacity: 0;
+      color: #7c3aed;
+    }
+    
+    .story-close-btn.visible {
+      opacity: 1;
+    }
+    
+    .story-close-btn:hover {
+      transform: scale(1.1);
+      background: #a855f7;
+      color: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    
+    
+    /* Overlay for expanded card */
+    .card-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 20;
+      opacity: 0;
+      
+      pointer-events: none;
+    }
+    
+    .card-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 24;
+    }
+    
+    /* Prevent body scroll when story is open */
+    body.story-open {
+      overflow: hidden;
+    }
+    
+    /* Custom HTMX transitions */
+    .htmx-swapping {
+      opacity: 0;
+      transition: opacity 200ms ease-out;
+    }
+    
+    .htmx-added {
+      opacity: 0;
+    }
+    
+    .htmx-settling {
+      opacity: 1;
+      transition: opacity 300ms ease-in;
+    }
+    
+    /* Storybook spine */
+    .book-spine {
+      background: linear-gradient(to bottom, #8b5a3c, #6d4226);
+      box-shadow: 
+        inset 0 0 20px rgba(178, 72, 72, 0.3),
+        0 0 30px rgba(41, 3, 3, 0.2);
+      z-index: 33;
+    }
+    
+    /* Grass decoration */
+    .grass {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40'%3E%3Cpath d='M0,40 Q10,20 20,40 T40,40 T60,40 T80,40 T100,40' fill='%234ade80' opacity='0.3'/%3E%3Cpath d='M0,40 Q5,25 10,40 T20,40 T30,40 T40,40 T50,40 T60,40 T70,40 T80,40 T90,40 T100,40' fill='%2322c55e' opacity='0.5'/%3E%3C/svg%3E") repeat-x;
+    }
+    
+    /* Thistle decoration */
+    .thistle {
+      transition: transform 0.3s ease;
+    }
+    
+    .thistle:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    /* Desktop depth background - vanishing point perspective */
+    @media (min-width: 1024px) {
+      body {
+        perspective: 1200px;
+        transform-style: preserve-3d;
+      }
+      
+      .depth-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -10;
+        overflow: hidden;
+      }
+      
+      /* Ground plane with perspective */
+      .ground-plane {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60%;
+        background: 
+          linear-gradient(to bottom, 
+            rgba(34, 197, 94, 0.1) 0%,
+            rgba(34, 197, 94, 0.2) 50%,
+            rgba(34, 197, 94, 0.3) 100%
+          );
+        transform: rotateX(75deg) translateZ(-200px);
+        transform-origin: bottom center;
+      }
+      
+      /* Rolling hills - softer, less jarring layers */
+      .hill-layer-1 {
+        position: absolute;
+        bottom: 20%;
+        left: 0;
+        right: 0;
+        height: 25%;
+        background: 
+          radial-gradient(ellipse 120% 80% at center bottom, 
+            rgba(34, 197, 94, 0.15) 0%,
+            rgba(34, 197, 94, 0.08) 60%,
+            transparent 100%
+          );
+        transform: translateZ(-200px) scale(1.2);
+      }
+      
+      .hill-layer-2 {
+        position: absolute;
+        bottom: 30%;
+        left: 0;
+        right: 0;
+        height: 20%;
+        background: 
+          radial-gradient(ellipse 160% 70% at center bottom, 
+            rgba(16, 185, 129, 0.12) 0%,
+            rgba(16, 185, 129, 0.06) 70%,
+            transparent 100%
+          );
+        transform: translateZ(-400px) scale(1.4);
+      }
+      
+      .hill-layer-3 {
+        position: absolute;
+        bottom: 40%;
+        left: 0;
+        right: 0;
+        height: 15%;
+        background: 
+          radial-gradient(ellipse 200% 60% at center bottom, 
+            rgba(5, 150, 105, 0.08) 0%,
+            rgba(5, 150, 105, 0.04) 80%,
+            transparent 59%
+          );
+        transform: translateZ(-600px) scale(1.6);
+      }
+      
+      /* Simplified fence line - cleaner perspective */
+      .fence-line {
+        position: absolute;
+        bottom: 0;
+        left: 20%;
+        right: 80%;
+        height: 1px;
+        background: linear-gradient(to right, 
+          rgba(120, 113, 108, 0.4) 0%,
+          rgba(120, 113, 108, 0.2) 50%,
+          transparent 10%
+        );
+        transform: translateZ(-50px) rotateX(85deg);
+        transform-origin: left bottom;
+      }
+      
+      .fence-line::before {
+        content: '';
+        position: absolute;
+        top: -80px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, 
+          rgba(120, 113, 108, 0.3) 0%,
+          rgba(120, 113, 108, 0.15) 50%,
+          transparent 100%
+        );
+      }
+      
+      /* Simplified fence posts */
+      .fence-post {
+        position: absolute;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to top, 
+          rgba(120, 113, 108, 0.3) 0%,
+          rgba(120, 113, 108, 0.1) 100%
+        );
+      }
+      
+      .fence-post-1 {
+        left: 20%;
+        height: 15%;
+        transform: translateZ(-50px);
+      }
+      
+      .fence-post-2 {
+        left: 30%;
+        height: 10%;
+        transform: translateZ(-100px);
+      }
+      
+      .fence-post-3 {
+        left: 38%;
+        height: 6%;
+        transform: translateZ(-150px);
+      }
+      
+      /* Subtle atmospheric sky */
+      .sky-gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60%;
+        background: 
+          linear-gradient(to bottom, 
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(196, 181, 253, 0.1) 40%,
+            transparent 100%
+          );
+        transform: translateZ(-800px) scale(1.5);
+      }
+      
+      /* Bush line with vanishing point perspective */
+      .bush-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 15%;
+        transform: translateZ(-100px);
+      }
+      
+      .bush {
+        position: absolute;
+        bottom: 0;
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        background: linear-gradient(135deg, 
+          rgba(34, 197, 94, 0.6) 0%,
+          rgba(22, 163, 74, 0.7) 50%,
+          rgba(16, 124, 63, 0.5) 100%
+        );
+        filter: blur(0.5px);
+      }
+      
+      /* Left side bushes - converging to center behind cards */
+      .bush-1 {
+        left: 5%;
+        width: 120px;
+        height: 80px;
+        transform: translateZ(-50px);
+      }
+      
+      .bush-2 {
+        left: 20%;
+        width: 90px;
+        height: 60px;
+        transform: translateZ(-120px);
+        opacity: 0.8;
+      }
+      
+      .bush-3 {
+        left: 32%;
+        width: 70px;
+        height: 45px;
+        transform: translateZ(-200px);
+        opacity: 0.6;
+      }
+      
+      .bush-4 {
+        left: 42%;
+        width: 50px;
+        height: 30px;
+        transform: translateZ(-300px);
+        opacity: 0.4;
+      }
+      
+      .bush-5 {
+        left: 48%;
+        width: 35px;
+        height: 20px;
+        transform: translateZ(-400px);
+        opacity: 0.3;
+      }
+      
+      /* Right side bushes - converging to center behind cards */
+      .bush-6 {
+        right: 5%;
+        width: 110px;
+        height: 75px;
+        transform: translateZ(-60px);
+      }
+      
+      .bush-7 {
+        right: 20%;
+        width: 85px;
+        height: 55px;
+        transform: translateZ(-140px);
+        opacity: 0.8;
+      }
+      
+      .bush-8 {
+        right: 32%;
+        width: 65px;
+        height: 40px;
+        transform: translateZ(-220px);
+        opacity: 0.6;
+      }
+      
+      .bush-9 {
+        right: 42%;
+        width: 45px;
+        height: 25px;
+        transform: translateZ(-320px);
+        opacity: 0.4;
+      }
+      
+      .bush-10 {
+        right: 48%;
+        width: 30px;
+        height: 15px;
+        transform: translateZ(-420px);
+        opacity: 0.3;
+      }
+      
+      /* Thistles along the path */
+      .thistle-path {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 20%;
+        transform: translateZ(-80px);
+      }
+      
+      .path-thistle {
+        position: absolute;
+        bottom: 0;
+        width: 20px;
+        height: 40px;
+        opacity: 0.4;
+        filter: blur(0.3px);
+      }
+      
+      .path-thistle svg {
+        width: 100%;
+        height: 100%;
+      }
+      
+      .thistle-1 {
+        left: 15%;
+        transform: translateZ(-80px) scale(0.8);
+      }
+      
+      .thistle-2 {
+        left: 35%;
+        transform: translateZ(-150px) scale(0.6);
+      }
+      
+      .thistle-3 {
+        left: 47%;
+        transform: translateZ(-250px) scale(0.4);
+      }
+      
+      .thistle-4 {
+        right: 15%;
+        transform: translateZ(-90px) scale(0.7);
+      }
+      
+      .thistle-5 {
+        right: 35%;
+        transform: translateZ(-160px) scale(0.5);
+      }
+      
+      .thistle-6 {
+        right: 47%;
+        transform: translateZ(-260px) scale(0.35);
+      }
+      
+      /* Enhance existing cards with ground shadows */
+      .notebook-page {
+        filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
+        position: relative;
+        z-index: 10;
+      }
+      
+      .notebook-page::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        width: 80%;
+        height: 20px;
+        background: 
+          radial-gradient(ellipse, 
+            rgba(0, 0, 0, 0.1) 0%,
+            rgba(0, 0, 0, 0.05) 50%,
+            transparent 100%
+          );
+        transform: translateX(-50%) translateZ(-20px);
+        border-radius: 50%;
+      }
+    }
+    
+    /* Mobile-specific styles */
+    @media (max-width: 640px) {
+      .mobile-scroll-hint {
+        animation: scrollHint 2s ease-in-out infinite;
+      }
+      
+      @keyframes scrollHint {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(-10px); }
+      }
+    }
+    
+    /* Prevent text selection on mobile for better UX */
+    @media (hover: none) {
+      .notebook-page {
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+    }
+    
+    /* Book Container Styles */
+    .storybook-container {
+      background: linear-gradient(135deg, 
+        #8b5a3c 0%, 
+        #a0522d 25%, 
+        #d2b48c  50%, 
+        #daa520 75%, 
+        #cd853f 100%
+      );
+      border-radius: 12px 25px 25px 12px;
+      padding: 2rem;
+      margin: 2rem auto;
+      max-width: 95vw;
+      width: 100%;
+      position: relative;
+      box-shadow: 
+        0px 3px 0px #654321,
+        0px 6px 0px #5d3a1a,
+        0px 9px 0px #543214,
+        0px 12px 30px rgba(0, 0, 0, 0.4),
+        inset 0px 2px 3px rgba(255, 255, 255, 0.3);
+      border-left: 3px solid #8b4513;
+      border-right: 1px solid #deb887;
+    }
+    
+    /* Book spine effect */
+    .storybook-container::before {
+      content: '';
+      position: absolute;
+      left: -3px;
+      top: 20px;
+      height: 60px;
+      width: 2px;
+      background: linear-gradient(to bottom, #deb887, #cd853f);
+      border-right: 1px solid #8b4513;
+    }
+    
+    .storybook-container::after {
+      content: '';
+      position: absolute;
+      left: -3px;
+      top: 100px;
+      height: 60px;
+      width: 2px;
+      background: linear-gradient(to bottom, #deb887, #cd853f);
+      border-right: 1px solid #8b4513;
+    }
+    
+    /* Book pages background */
+    .book-page {
+      background: 
+        linear-gradient(90deg, rgba(139, 69, 19, 0.1) 0%, transparent 3%),
+        linear-gradient(to right, #fefefe 0%, #ffffff 100%);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 0 0.5rem;
+      box-shadow: 
+        inset 0px 0px 30px rgba(139, 69, 19, 0.1),
+        0px 2px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      min-height: 60vh;
+    }
+    
+    /* Ruled paper lines */
+    .book-page::before {
+      content: '';
+      position: absolute;
+      left: 40px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: rgba(139, 69, 19, 0.2);
+    }
+    
+    /* Paper texture */
+    .book-page {
+      background-image: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 24px,
+          rgba(139, 69, 19, 0.03) 25px
+        );
+    }
+    
+    /* Desktop book sizing */
+    @media (min-width: 768px) {
+      .storybook-container {
+        max-width: 900px;
+        padding: 3rem;
+      }
+      
+      .book-page {
+        padding: 2rem 3rem;
+        margin: 0 1rem;
+      }
+    }
+    
+    /* Large desktop book sizing */
+    @media (min-width: 1024px) {
+      .storybook-container {
+        max-width: 1200px;
+        padding: 4rem;
+      }
+      
+      .book-page {
+        padding: 3rem 4rem;
+        margin: 0 1.5rem;
+      }
+    }
+    
+    /* Book title on spine */
+    .book-spine-title {
+      position: absolute;
+      left: -35px;
+      top: 50%;
+      transform: rotate(-90deg) translateY(-50%);
+      transform-origin: center;
+      font-family: 'Abril Fatface', serif;
+      font-size: 0.8rem;
+      color: #deb887;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      white-space: nowrap;
+      z-index: 10;
+    }
+    
+    @media (min-width: 768px) {
+      .book-spine-title {
+        font-size: 1rem;
+        left: -40px;
+      }
+    }
+    
+    /* Page Navigation Styles */
+    .page-section {
+      display: none;
+    }
+    
+    .page-section.active {
+      display: block;
+    }
+    
+    /* Chapter Title Navigation */
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .chapter-nav-btn {
+      background: rgba(168, 85, 247, 0.1);
+      border: 2px solid #a855f7;
+      color: #7c3aed;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    
+    .chapter-nav-btn:hover {
+      background: #a855f7;
+      color: white;
+      transform: scale(1.1);
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+    }
+    
+    .chapter-nav-btn:disabled {
+      background: rgba(209, 213, 219, 0.5);
+      border-color: #d1d5db;
+      color: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .chapter-nav-btn:disabled:hover {
+      background: rgba(209, 213, 219, 0.5);
+      color: #9ca3af;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .chapter-title-text {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 1.25rem;
+      color: #b45309;
+      text-align: center;
+      min-width: 280px;
+    }
+    
+    @media (max-width: 640px) {
+      .chapter-header {
+        gap: 0.5rem;
+      }
+      
+      .chapter-nav-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+      
+      .chapter-title-text {
+        font-size: 1.1rem;
+        min-width: 200px;
+      }
+    }
+    
+    /* Chapter Cards for Index */
+    .chapter-card {
+      background: linear-gradient(135deg, #f9f9f9 0%, #fff 100%);
+      border: 2px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+    
+    .chapter-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(168, 85, 247, 0.2);
+      border-color: #a855f7;
+    }
+    
+    .chapter-number {
+      font-family: 'Abril Fatface', serif;
+      font-size: 3rem;
+      color: #a855f7;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    
+    .chapter-title {
+      font-family: 'Abril Fatface', serif;
+      font-size: 1.5rem;
+      color: #7c3aed;
+      margin-bottom: 0.75rem;
+    }
+    
+    .chapter-description {
+      font-family: 'Georgia', serif;
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .chapter-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Patrick Hand', cursive;
+      color: #9333ea;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-gray-800 flex flex-col items-center px-4 sm:px-6 py-6 sm:py-10 paper-texture">
+
+  <!-- Desktop depth background - vanishing point perspective -->
+  <div class="depth-background hidden lg:block">
+    <!-- Sky with atmospheric perspective -->
+    <div class="sky-gradient"></div>
+    
+    <!-- Rolling hills - multiple layers for depth -->
+    <div class="hill-layer-3"></div>
+    <div class="hill-layer-2"></div>
+    <div class="hill-layer-1"></div>
+    
+    <!-- Ground plane with perspective -->
+    <div class="ground-plane"></div>
+    
+    <!-- Fence line perspective -->
+    <div class="fence-line"></div>
+    
+    <!-- Fence posts at different distances -->
+    <div class="fence-post fence-post-1"></div>
+    <div class="fence-post fence-post-2"></div>
+    <div class="fence-post fence-post-3"></div>
+    
+    <!-- Bush line with vanishing point -->
+    <div class="bush-line">
+      <!-- Left side bushes -->
+      <div class="bush bush-1"></div>
+      <div class="bush bush-2"></div>
+      <div class="bush bush-3"></div>
+      <div class="bush bush-4"></div>
+      <div class="bush bush-5"></div>
+      
+      <!-- Right side bushes -->
+      <div class="bush bush-6"></div>
+      <div class="bush bush-7"></div>
+      <div class="bush bush-8"></div>
+      <div class="bush bush-9"></div>
+      <div class="bush bush-10"></div>
+    </div>
+    
+    <!-- Thistles along the path -->
+    <div class="thistle-path">
+      <div class="path-thistle thistle-1">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="30" r="12" fill="#9333ea" opacity="0.7"/>
+          <circle cx="42" cy="28" r="8" fill="#a855f7" opacity="0.6"/>
+          <circle cx="58" cy="28" r="8" fill="#a855f7" opacity="0.6"/>
+          <path d="M50,42 L50,85" stroke="#16a34a" stroke-width="3"/>
+          <path d="M50,60 L42,50 M50,60 L58,50" stroke="#16a34a" stroke-width="2"/>
+        </svg>
+      </div>
+      
+      <div class="path-thistle thistle-2">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="35" r="10" fill="#7c3aed" opacity="0.6"/>
+          <circle cx="45" cy="32" r="7" fill="#8b5cf6" opacity="0.5"/>
+          <circle cx="55" cy="32" r="7" fill="#8b5cf6" opacity="0.5"/>
+          <path d="M50,45 L50,80" stroke="#059669" stroke-width="2"/>
+          <path d="M50,58 L44,52 M50,58 L56,52" stroke="#059669" stroke-width="1.5"/>
+        </svg>
+      </div>
+      
+      <div class="path-thistle thistle-3">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="40" r="8" fill="#6d28d9" opacity="0.5"/>
+          <path d="M50,48 L50,75" stroke="#047857" stroke-width="2"/>
+        </svg>
+      </div>
+      
+      <div class="path-thistle thistle-4">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="32" r="11" fill="#8b5cf6" opacity="0.6"/>
+          <circle cx="43" cy="30" r="7" fill="#a78bfa" opacity="0.5"/>
+          <circle cx="57" cy="30" r="7" fill="#a78bfa" opacity="0.5"/>
+          <path d="M50,43 L50,82" stroke="#16a34a" stroke-width="2.5"/>
+          <path d="M50,58 L43,50 M50,58 L57,50" stroke="#16a34a" stroke-width="1.5"/>
+        </svg>
+      </div>
+      
+      <div class="path-thistle thistle-5">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="38" r="9" fill="#7c3aed" opacity="0.5"/>
+          <path d="M50,47 L50,78" stroke="#059669" stroke-width="2"/>
+          <path d="M50,60 L45,55 M50,60 L55,55" stroke="#059669" stroke-width="1"/>
+        </svg>
+      </div>
+      
+      <div class="path-thistle thistle-6">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="42" r="7" fill="#6d28d9" opacity="0.4"/>
+          <path d="M50,49 L50,72" stroke="#047857" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative thistle elements - hidden on mobile -->
+  <svg class="fixed top-10 left-10 w-12 sm:w-16 h-12 sm:h-16 opacity-10 rotate-12 pointer-events-none hidden sm:block" viewBox="0 0 100 100">
+    <circle cx="50" cy="40" r="15" fill="#9333ea" opacity="0.6"/>
+    <circle cx="40" cy="35" r="12" fill="#a855f7" opacity="0.5"/>
+    <circle cx="60" cy="35" r="12" fill="#a855f7" opacity="0.5"/>
+    <path d="M50,55 L50,80" stroke="#16a34a" stroke-width="3"/>
+    <path d="M50,65 L40,55 M50,65 L60,55" stroke="#16a34a" stroke-width="2"/>
+  </svg>
+  
+  <svg class="fixed bottom-20 right-20 w-12 sm:w-14 h-12 sm:h-14 opacity-10 -rotate-12 pointer-events-none hidden sm:block" viewBox="0 0 100 100">
+    <circle cx="50" cy="40" r="15" fill="#9333ea" opacity="0.6"/>
+    <circle cx="40" cy="35" r="12" fill="#a855f7" opacity="0.5"/>
+    <circle cx="60" cy="35" r="12" fill="#a855f7" opacity="0.5"/>
+    <path d="M50,55 L50,80" stroke="#16a34a" stroke-width="3"/>
+    <path d="M50,65 L40,55 M50,65 L60,55" stroke="#16a34a" stroke-width="2"/>
+  </svg>
+  
+  <!-- Book spine decoration - desktop only -->
+  <div class="fixed left-0 top-0 h-full w-8 book-spine opacity-30 hidden lg:block"></div>
+
+  <header class="mb-8 sm:mb-12 text-center relative z-10">
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-story text-purple-800 text-story-shadow mb-2 flex items-center justify-center flex-wrap">
+      <svg class="inline-block w-8 sm:w-10 lg:w-12 h-8 sm:h-10 lg:h-12 -mt-1 sm:-mt-2 thistle" viewBox="0 0 100 100">
+        <circle cx="50" cy="40" r="18" fill="#9333ea"/>
+        <circle cx="38" cy="35" r="14" fill="#a855f7"/>
+        <circle cx="62" cy="35" r="14" fill="#a855f7"/>
+        <circle cx="45" cy="30" r="10" fill="#c084fc"/>
+        <circle cx="55" cy="30" r="10" fill="#c084fc"/>
+        <path d="M50,58 L50,85" stroke="#16a34a" stroke-width="4"/>
+        <path d="M50,70 L38,58 M50,70 L62,58" stroke="#16a34a" stroke-width="3"/>
+      </svg>
+      <span class="ml-2">Thorny Knolls</span>
+    </h1>
+    <p class="mt-2 sm:mt-3 text-base sm:text-lg lg:text-xl font-book italic text-purple-700 px-4">Where every animal has a story to tell</p>
+    
+    <!-- Decorative underline -->
+    <svg class="mx-auto mt-3 sm:mt-4" width="150" height="20" viewBox="0 0 150 20">
+      <path d="M10,10 Q40,5 75,10 T140,10" stroke="#9333ea" stroke-width="2" fill="none" opacity="0.5"/>
+    </svg>
+  </header>
+
+  <!-- Storybook Container -->
+  <div class="storybook-container">
+    <!-- Book spine title -->
+    <div class="book-spine-title">Thorny Knolls</div>
+    
+    <!-- INDEX PAGE - Default View -->
+    <section id="index-page" class="page-section active">
+      <div class="book-page">
+    <div class="mb-8 sm:mb-12 text-center">
+      <p class="font-hand text-lg sm:text-xl text-purple-600 mb-6">Welcome to the Storybook</p>
+    </div>
+    
+    <!-- Chapter Cards Grid -->
+    <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-6 lg:gap-8">
+      
+      <!-- Chapter 1 Card -->
+      <div class="chapter-card" onclick="showPage('chapter-one')">
+        <div class="chapter-number">1</div>
+        <h3 class="chapter-title">Meet the Herd</h3>
+        <p class="chapter-description">
+          Get to know each of our delightful animal residents at Thorny Knolls. From Highland cows to rescue donkeys, mules, and horses, every animal has their own personality and story to tell.
+        </p>
+        <div class="chapter-meta">
+          <span>10 Animal Friends</span>
+          <span>→ Enter Chapter</span>
+        </div>
+      </div>
+      
+      <!-- Chapter 2 Card -->
+      <div class="chapter-card" onclick="showPage('chapter-two')">
+        <div class="chapter-number">2</div>
+        <h3 class="chapter-title">Daily Adventures</h3>
+        <p class="chapter-description">
+          Experience the daily rhythm of farm life through the eyes of our animal friends. From dawn's first crow to evening's final mischief, every day brings new adventures.
+        </p>
+        <div class="chapter-meta">
+          <span>3 Daily Stories</span>
+          <span>→ Enter Chapter</span>
+        </div>
+      </div>
+      
+      <!-- Coming Soon Card -->
+      <div class="chapter-card opacity-60 cursor-not-allowed" style="pointer-events: none;">
+        <div class="chapter-number">3</div>
+        <h3 class="chapter-title">Seasonal Tales</h3>
+        <p class="chapter-description">
+          Follow our friends through the changing seasons, from spring's new arrivals to winter's cozy barn gatherings.
+        </p>
+        <div class="chapter-meta">
+          <span>Coming Soon</span>
+          <span>📝 In Progress</span>
+        </div>
+      </div>
+      
+      <!-- Coming Soon Card -->
+      <div class="chapter-card opacity-60 cursor-not-allowed" style="pointer-events: none;">
+        <div class="chapter-number">4</div>
+        <h3 class="chapter-title">Special Occasions</h3>
+        <p class="chapter-description">
+          Celebrate birthdays, holidays, and unexpected visitors with the Thorny Knolls family.
+        </p>
+        <div class="chapter-meta">
+          <span>Coming Soon</span>
+          <span>🎉 Planned</span>
+        </div>
+      </div>
+      
+      </div>
+    </section>
+
+    <!-- CHAPTER ONE PAGE -->
+    <section id="chapter-one" class="page-section">
+      <div class="book-page">
+    <div class="chapter-header">
+      <button id="ch1-back" class="chapter-nav-btn" onclick="showPage('index-page')" title="Back to Index">←</button>
+      <div class="chapter-title-text">Chapter One: Meet the Herd</div>
+      <button id="ch1-forward" class="chapter-nav-btn" onclick="showPage('chapter-two')" title="Next Chapter">→</button>
+    </div>
+    
+    <!-- Mobile scroll hint -->
+    <div class="sm:hidden mb-4 text-center">
+      <p class="text-sm text-purple-600 font-hand mobile-scroll-hint">← Swipe to see more →</p>
+    </div>
+
+    <!-- Animal Card Container - Horizontal scroll on mobile -->
+    <div class="w-full overflow-x-auto sm:overflow-visible">
+      <!-- Animal Card Grid -->
+      <section class="flex sm:grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-10 max-w-screen-xl sm:w-full sm:mx-auto px-2 sm:px-0">
+
+      <!-- Animal Card: Gus -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: 3deg;">
+            "Highland beauty!" 
+            <span class="text-lg sm:text-xl">🏔️</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Pumpkin</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji cow-emoji">🐄</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            A majestic Highland cow with flowing hair and gentle eyes. One of our three beloved Highland beauties.
+          </p>
+
+          <button
+            hx-get="animals/pumpkin/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Pumpkin's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Mabel -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-gray-200 flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: -2deg;">
+            "Proud mama!" 
+            <span class="text-lg sm:text-xl">👩‍👧</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Lebella</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji highland-emoji">🐄</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            A magnificent Highland cow and devoted mother to Anabella. Strong, wise, and protective of her family.
+          </p>
+
+          <button
+            hx-get="animals/lebella/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Lebella's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Clover -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: 4deg;">
+            "First calf!" 
+            <span class="text-lg sm:text-xl">🥰</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Anabella</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji highland-young-emoji">🐄</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            Lebella's precious first calf and daughter. Young, playful, and learning the ways of Highland life.
+          </p>
+
+          <button
+            hx-get="animals/anabella/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Anabella's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Rosie -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: -3deg;">
+            "Mini magical!" 
+            <span class="text-lg sm:text-xl">⚡</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Dobby</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji donkey-emoji">🫏</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            Our beloved mini donkey named after Harry Potter's house elf. Small in size but big in personality!
+          </p>
+
+          <button
+            hx-get="animals/dobby/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Dobby's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Chester -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: 2deg;">
+            "Gentle giant!" 
+            <span class="text-lg sm:text-xl">🎆</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Argus</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji mammoth-donkey-emoji">🫏</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            A massive, majestic donkey rescued from slaughter. Despite his size, he's the gentlest soul you'll ever meet.
+          </p>
+
+          <button
+            hx-get="animals/argus/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Argus's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Luna -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: -4deg;">
+            "Boss lady!" 
+            <span class="text-lg sm:text-xl">👑</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Willow</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji mule-emoji">🐴</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            Rescued from slaughter, she keeps the boys honest with a fallen crest from her previous owners' overfeeding.
+          </p>
+
+          <button
+            hx-get="animals/willow/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Willow's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Sega -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: 3deg;">
+            "Katie's friend!" 
+            <span class="text-lg sm:text-xl">💕</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Sega</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji mammoth-donkey-emoji">🫏</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            A beautiful blonde mule belonging to our good friend Katie. Named by Katie's daughter with love.
+          </p>
+
+          <button
+            hx-get="animals/sega/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Sega's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Hugo -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: -2deg;">
+            "Trail buddy!" 
+            <span class="text-lg sm:text-xl">🥾</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Hugo</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji horse-emoji">🐴</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            A gaited mule we adopted from a rescue. He's learning to be a trail donkey and loves his new adventure life!
+          </p>
+
+          <button
+            hx-get="animals/hugo/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Hugo's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Smoke -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: 4deg;">
+            "First horse!" 
+            <span class="text-lg sm:text-xl">🎆</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Smoke</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji cow-emoji">🐄</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            In his early 20s and one of our first horses on the ranch. A wise and gentle elder with so many stories to share.
+          </p>
+
+          <button
+            hx-get="animals/smoke/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Smoke's Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Animal Card: Raider -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: -3deg;">
+            "Ranch pioneer!" 
+            <span class="text-lg sm:text-xl">🏆</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Raider</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3"><span class="animal-emoji cow-emoji">🐄</span></div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            Also in his early 20s and one of our first horses on the ranch. A loyal companion who helped build our dreams.
+          </p>
+
+          <button
+            hx-get="animals/raider/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Raider's Story →
+          </button>
+        </div>
+      </div>
+
+        </section>
+      </div>
+    </section>
+
+    <!-- CHAPTER TWO PAGE -->
+    <section id="chapter-two" class="page-section">
+      <div class="book-page">
+    <div class="chapter-header">
+      <button id="ch2-back" class="chapter-nav-btn" onclick="showPage('chapter-one')" title="Previous Chapter">←</button>
+      <div class="chapter-title-text">Chapter Two: Daily Adventures</div>
+      <button id="ch2-forward" class="chapter-nav-btn" disabled title="Coming Soon">→</button>
+    </div>
+
+    <!-- Chapter 2 Animal Cards -->
+    <div class="w-full overflow-x-auto sm:overflow-visible">
+      <section class="flex sm:grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-10 max-w-screen-xl sm:w-full sm:mx-auto px-2 sm:px-0">
+
+      <!-- Story Card: Morning Chores -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: 2deg;">
+            "5:30 AM!" 
+            <span class="text-lg sm:text-xl">🌅</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Morning Chores</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3">
+            <span class="animal-emoji">🚜</span>
+            <span class="animal-emoji">🥛</span>
+          </div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            Every morning starts the same way at Thorny Knolls - with Chester's precise 4:47 AM wake-up call.
+          </p>
+
+          <button
+            hx-get="posts/morning-chores/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-amber-200 hover:to-amber-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Morning Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Story Card: Feeding Time Chaos -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: -3deg;">
+            "Chaos!" 
+            <span class="text-lg sm:text-xl">💥</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Feeding Frenzy</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3">
+            <span class="animal-emoji">🥕</span>
+            <span class="animal-emoji">🌾</span>
+          </div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            When the breakfast bell rings, all plans go out the window. It's every animal for themselves!
+          </p>
+
+          <button
+            hx-get="posts/feeding-frenzy/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-amber-200 hover:to-amber-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Feeding Story →
+          </button>
+        </div>
+      </div>
+
+      <!-- Story Card: Evening Shenanigans -->
+      <div class="relative group notebook-page rounded-lg p-4 sm:p-6 overflow-hidden hover-lift flex-shrink-0 w-[280px] sm:w-auto">
+        <!-- Spiral Binding -->
+        <div class="absolute left-0 top-0 bottom-0 w-8 sm:w-12 bg-gradient-to-r from-gray-100 to-transparent flex flex-col justify-evenly items-center py-3 sm:py-4">
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+          <div class="spiral-hole"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="pl-8 sm:pl-12 flex flex-col w-full">
+          <!-- Doodle Note -->
+          <div class="absolute top-2 sm:top-3 right-2 sm:right-3 text-xs sm:text-sm italic text-purple-600 font-hand doodle-note" style="--rotation: 4deg;">
+            "Mischief!" 
+            <span class="text-lg sm:text-xl">😈</span>
+          </div>
+
+          <h3 class="text-xl sm:text-2xl font-story text-purple-800 mb-1">Sunset Trouble</h3>
+          <div class="text-3xl sm:text-4xl mb-2 sm:mb-3">
+            <span class="animal-emoji">🌅</span>
+            <span class="animal-emoji">🎭</span>
+          </div>
+          <p class="text-sm sm:text-base font-book text-gray-700 leading-relaxed">
+            As the sun sets, the animals think it's time for their second round of entertainment.
+          </p>
+
+          <button
+            hx-get="posts/sunset-trouble/index.html"
+            hx-target="#animalDetailPanel"
+            hx-swap="innerHTML transition:true"
+            hx-indicator="#loading-spinner"
+            hx-on::after-request="expandCard(this)"
+            class="mt-4 sm:mt-6 self-start bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 font-book text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:from-amber-200 hover:to-amber-300 transition-all duration-300 shadow-sm hover:shadow-md"
+          >
+            Read Evening Story →
+          </button>
+        </div>
+      </div>
+
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <!-- Loading spinner -->
+  <div id="loading-spinner" class="htmx-indicator fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
+    <div class="bg-white/90 backdrop-blur rounded-full p-3 sm:p-4 shadow-lg">
+      <svg class="animate-spin h-6 w-6 sm:h-8 sm:w-8 text-purple-600" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Card Overlay -->
+  <div id="cardOverlay" class="card-overlay" onclick="closeExpandedCard()"></div>
+
+  <!-- Detail Panel Target (hidden, used for HTMX loading) -->
+  <section id="animalDetailPanel" class="hidden">
+    <!-- Animal details will be loaded here via HTMX -->
+  </section>
+
+  <!-- Footer decoration -->
+  <footer class="mt-12 sm:mt-20 relative w-full">
+    <div class="grass"></div>
+    <div class="text-center py-6 sm:py-8">
+      <p class="font-hand text-purple-700 text-base sm:text-lg px-4">
+        Every day brings a new adventure at Thorny Knolls
+      </p>
+      <div class="mt-4 flex justify-center gap-4 sm:gap-6">
+        <svg class="w-6 h-6 sm:w-8 sm:h-8 thistle cursor-pointer" viewBox="0 0 100 100">
+          <circle cx="50" cy="40" r="15" fill="#9333ea" opacity="0.8"/>
+          <circle cx="40" cy="35" r="12" fill="#a855f7" opacity="0.7"/>
+          <circle cx="60" cy="35" r="12" fill="#a855f7" opacity="0.7"/>
+          <path d="M50,55 L50,80" stroke="#16a34a" stroke-width="3"/>
+          <path d="M50,65 L40,55 M50,65 L60,55" stroke="#16a34a" stroke-width="2"/>
+        </svg>
+        <svg class="w-6 h-6 sm:w-8 sm:h-8 thistle cursor-pointer" viewBox="0 0 100 100">
+          <circle cx="50" cy="35" r="18" fill="#a855f7" opacity="0.8"/>
+          <circle cx="38" cy="30" r="14" fill="#c084fc" opacity="0.7"/>
+          <circle cx="62" cy="30" r="14" fill="#c084fc" opacity="0.7"/>
+          <path d="M50,53 L50,80" stroke="#16a34a" stroke-width="3"/>
+          <path d="M50,65 L35,50 M50,65 L65,50" stroke="#16a34a" stroke-width="2"/>
+        </svg>
+        <svg class="w-6 h-6 sm:w-8 sm:h-8 thistle cursor-pointer" viewBox="0 0 100 100">
+          <circle cx="50" cy="40" r="15" fill="#9333ea" opacity="0.8"/>
+          <circle cx="40" cy="35" r="12" fill="#a855f7" opacity="0.7"/>
+          <circle cx="60" cy="35" r="12" fill="#a855f7" opacity="0.7"/>
+          <path d="M50,55 L50,80" stroke="#16a34a" stroke-width="3"/>
+          <path d="M50,65 L40,55 M50,65 L60,55" stroke="#16a34a" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let expandedCard = null;
+    let originalCardState = null;
+    
+    // Expand card function
+    function expandCard(button) {
+      const card = button.closest('.notebook-page');
+      const detailPanel = document.getElementById('animalDetailPanel');
+      const overlay = document.getElementById('cardOverlay');
+      
+      // Store reference
+      expandedCard = card;
+      
+      // Fade out other cards
+      document.querySelectorAll('.notebook-page').forEach(c => {
+        if (c !== card) c.classList.add('fade-out');
+      });
+      
+      // Ensure this card is NOT faded out and add expanding class
+      card.classList.remove('fade-out');
+      card.classList.add('expanding-card');
+      overlay.classList.add('active');
+      document.body.classList.add('story-open');
+      
+      // Trigger expansion after a frame
+      requestAnimationFrame(() => {
+        card.classList.add('expanded-card');
+        card.classList.remove('fade-out'); // Double-check removal
+        
+        // Wait for card expansion to complete (600ms transition)
+        setTimeout(() => {
+          // Create story view
+          const storyView = document.createElement('div');
+          storyView.className = 'story-view';
+          storyView.innerHTML = `
+            <button class="story-close-btn" onclick="closeExpandedCard()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <div class="story-content-wrapper">
+              ${detailPanel.innerHTML}
+            </div>
+          `;
+          
+          card.appendChild(storyView);
+          
+          // Trigger page flip animation after DOM insertion
+          requestAnimationFrame(() => {
+            storyView.classList.add('opening');
+            setTimeout(() => {
+              const closeBtn = card.querySelector('.story-close-btn');
+              if (closeBtn) closeBtn.classList.add('visible');
+            }, 1200);
+          });
+        }, 700); // Wait for expansion to complete
+      });
+      
+    }
+    
+    function closeExpandedCard() {
+      if (!expandedCard) return;
+      
+      const overlay = document.getElementById('cardOverlay');
+      const storyView = expandedCard.querySelector('.story-view');
+      const closeBtn = expandedCard.querySelector('.story-close-btn');
+      
+      // Hide close button and start closing animation
+      if (closeBtn) closeBtn.classList.remove('visible');
+      
+      if (storyView) {
+        storyView.style.animation = 'pageFlip 0.8s ease-in-out reverse';
+        
+        setTimeout(() => {
+          storyView.remove();
+          
+          // Start shrinking card
+          expandedCard.classList.remove('expanded-card');
+          
+          setTimeout(() => {
+            // Remove expanding class
+            expandedCard.classList.remove('expanding-card');
+            
+            // Show other cards
+            document.querySelectorAll('.notebook-page').forEach(c => {
+              c.classList.remove('fade-out');
+            });
+            
+            // Deactivate overlay
+            overlay.classList.remove('active');
+            
+            // Clear references
+            expandedCard = null;
+            
+            // Restore body scroll
+            document.body.classList.remove('story-open');
+            
+            // Clear detail panel
+            document.getElementById('animalDetailPanel').innerHTML = '';
+          }, 600);
+        }, 200);
+      }
+    }
+    
+    // Add subtle parallax to decorative elements (reduced effect) - desktop only
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 10;
+        const y = (e.clientY / window.innerHeight - 0.5) * 10;
+        
+        const decorations = document.querySelectorAll('.fixed svg');
+        decorations.forEach((el, i) => {
+          const speed = (i + 1) * 0.3;
+          el.style.transform = `translate(${x * speed}px, ${y * speed}px) rotate(${el.classList.contains('-rotate-12') ? '-12deg' : '12deg'})`;
+        });
+      });
+    }
+    
+    // Add touch feedback for mobile
+    if ('ontouchstart' in window) {
+      document.querySelectorAll('.notebook-page').forEach(card => {
+        card.addEventListener('touchstart', function() {
+          if (!this.classList.contains('expanding-card')) {
+            this.style.transform = 'scale(0.98)';
+          }
+        });
+        
+        card.addEventListener('touchend', function() {
+          if (!this.classList.contains('expanding-card')) {
+            this.style.transform = '';
+          }
+        });
+      });
+    }
+    
+    // Smooth horizontal scrolling for mobile
+    const scrollContainer = document.querySelector('.overflow-x-auto');
+    if (scrollContainer && window.innerWidth < 640) {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      
+      scrollContainer.addEventListener('touchstart', (e) => {
+        isDown = true;
+        startX = e.touches[0].pageX - scrollContainer.offsetLeft;
+        scrollLeft = scrollContainer.scrollLeft;
+      });
+      
+      scrollContainer.addEventListener('touchmove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.touches[0].pageX - scrollContainer.offsetLeft;
+        const walk = (x - startX) * 2;
+        scrollContainer.scrollLeft = scrollLeft - walk;
+      });
+      
+      scrollContainer.addEventListener('touchend', () => {
+        isDown = false;
+      });
+    }
+    
+    // ESC key to close story
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeExpandedCard();
+      }
+    });
+    
+    // PAGE NAVIGATION SYSTEM
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page-section').forEach(page => {
+        page.classList.remove('active');
+      });
+      
+      // Show target page
+      document.getElementById(pageId).classList.add('active');
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.querySelector('.expanded-card')) return; // Don't navigate if story is open
+      
+      const currentPage = document.querySelector('.page-section.active').id;
+      
+      if (e.key === 'ArrowRight') {
+        if (currentPage === 'index-page') {
+          showPage('chapter-one');
+        } else if (currentPage === 'chapter-one') {
+          showPage('chapter-two');
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentPage === 'chapter-two') {
+          showPage('chapter-one');
+        } else if (currentPage === 'chapter-one') {
+          showPage('index-page');
+        }
+      } else if (e.key === 'Home') {
+        showPage('index-page');
+      }
+    });
+  </script>
+
+</body>
+</html>

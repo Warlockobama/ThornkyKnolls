@@ -3,26 +3,32 @@
 
 /* ==================== CSS Custom Properties ==================== */
 :root {
-  /* Colors - Professional base with warm touches */
-  --bg-primary: #fdfbf7;
-  --bg-secondary: #f5f1e8;
-  --bg-card: #ffffff;
-  --text-primary: #2d2d2d;
-  --text-secondary: #6b6b6b;
-  --text-muted: #999999;
-  --accent-primary: #8b5cf6;
-  --accent-secondary: #c7df6a;
+  /* Colors - Dark theme with glows */
+  --bg: #050c08;
+  --bg-2: #0e1713;
+  --paper: #f7f4ec;
+  --ink: #0c1713;
+  --accent-primary: #c7df6a;
+  --accent-ink: #223114;
+  --accent-secondary: #ff6b5d;
   --accent-warm: #f59e0b;
-  --border-light: #e5e5e5;
-  --border-medium: #d4d4d4;
-  --shadow-sm: rgba(0, 0, 0, 0.05);
-  --shadow-md: rgba(0, 0, 0, 0.1);
-  --shadow-lg: rgba(0, 0, 0, 0.15);
+  --border-light: #d8d1c4;
+  --border-medium: #c2b7a5;
+  --shadow-sm: rgba(0, 0, 0, 0.24);
+  --shadow-md: rgba(0, 0, 0, 0.32);
+  --shadow-lg: rgba(0, 0, 0, 0.42);
+
+  /* Glow colors as RGB for transparency */
+  --glow-warm: 255, 107, 90;
+  --glow-cool: 76, 211, 255;
+  --glow-olive: 199, 223, 106;
+  --glow-sand: 217, 178, 140;
 
   /* Typography */
   --font-heading: 'Abril Fatface', serif;
   --font-body: Georgia, serif;
   --font-hand: 'Patrick Hand', cursive;
+  --font-nav: 'Barlow Condensed', sans-serif;
   --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   /* Spacing */
@@ -54,11 +60,53 @@ html {
 
 body {
   font-family: var(--font-body);
-  color: var(--text-primary);
-  background: var(--bg-primary);
+  color: var(--paper);
+  background: var(--bg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ==================== Background Gradient System ==================== */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(var(--glow-warm), 0.16) 0%, transparent 36%),
+    linear-gradient(300deg, rgba(var(--glow-cool), 0.14) 0%, transparent 32%),
+    radial-gradient(120% 120% at 80% 0%, rgba(255, 255, 255, 0.05), transparent 42%),
+    radial-gradient(90% 90% at 15% 20%, rgba(255, 255, 255, 0.06), transparent 45%),
+    linear-gradient(135deg, var(--bg-2) 0%, var(--bg) 48%, #020604 100%);
+  pointer-events: none;
+  z-index: -2;
+}
+
+.bg-layer::before {
+  content: "";
+  position: absolute;
+  width: 46%;
+  height: 52%;
+  top: -10%;
+  right: -6%;
+  background: linear-gradient(135deg, rgba(var(--glow-warm), 0.22), rgba(var(--glow-olive), 0.16));
+  border: 2.5px solid rgba(var(--glow-sand), 0.16);
+  transform: rotate(-5deg);
+  box-shadow: 28px 28px 0 rgba(0, 0, 0, 0.45);
+  opacity: 0.6;
+  mix-blend-mode: screen;
+}
+
+.bg-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(80% 70% at 30% 20%, rgba(255, 255, 255, 0.05), transparent 60%),
+    radial-gradient(90% 80% at 80% 20%, rgba(255, 255, 255, 0.04), transparent 65%),
+    radial-gradient(120% 90% at 50% 90%, rgba(0, 0, 0, 0.4), transparent 70%);
+  mix-blend-mode: soft-light;
+  opacity: 0.8;
 }
 
 img {
@@ -111,83 +159,146 @@ p {
 }
 
 /* ==================== Layout ==================== */
-.container {
+.container,
+.page {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--space-lg);
 }
 
 .site-header {
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border-light);
+  background: transparent;
+  border-bottom: none;
   padding: var(--space-lg) 0;
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 100;
-  box-shadow: 0 2px 8px var(--shadow-sm);
+  box-shadow: none;
 }
 
 .site-title {
   font-family: var(--font-heading);
   font-size: 2rem;
-  color: var(--accent-primary);
+  color: var(--paper);
   margin: 0;
 }
 
 .site-subtitle {
   font-family: var(--font-hand);
-  color: var(--text-secondary);
+  color: var(--paper);
   font-size: 1.1rem;
   margin-top: var(--space-xs);
+  opacity: 0.8;
 }
 
 .main-nav {
   display: flex;
-  gap: var(--space-lg);
+  gap: 10px;
+  flex-wrap: wrap;
   margin-top: var(--space-md);
 }
 
 .nav-link {
-  font-family: var(--font-system);
-  font-weight: 500;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--card-radius);
-  transition: all var(--transition-speed);
+  font-family: var(--font-nav);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 13px;
+  background: rgba(243, 240, 231, 0.6);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 7px 12px 6px;
+  box-shadow: 6px 6px 0 rgba(15, 28, 24, 0.32), 0 6px 18px rgba(0, 0, 0, 0.14);
+  transition: all 160ms ease;
+  color: var(--ink);
+  text-decoration: none;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 8px 8px 0 rgba(15, 28, 24, 0.36), 0 10px 22px rgba(0, 0, 0, 0.2);
+}
+
 .nav-link.active {
   background: var(--accent-primary);
-  color: white;
+  color: var(--accent-ink);
+  border-color: #b4c95a;
 }
 
-/* ==================== Cards ==================== */
+/* ==================== Stacked Card Deck ==================== */
+.deck,
 .cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--space-xl);
-  padding: var(--space-2xl) 0;
+  position: relative;
+  min-height: 460px;
+  padding-right: 48px;
+  margin: 40px 0 56px;
 }
 
+.card-panel,
 .card {
-  background: var(--bg-card);
-  border-radius: var(--card-radius);
-  overflow: hidden;
-  box-shadow: 0 4px 12px var(--shadow-md);
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  position: absolute;
+  top: 0;
+  left: var(--card-left, 0%);
+  width: var(--card-width, 100%);
+  background: var(--paper);
+  border: 2.4px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 12px 12px 0 rgba(10, 20, 17, 0.6), 0 18px 38px rgba(0, 0, 0, 0.3);
+  padding: 28px;
+  z-index: var(--stack-index, 1);
+  overflow: visible;
+
+  transform: translateX(var(--stack-shift, 0px))
+             translateY(calc(var(--stack-index, 1) * 12px))
+             rotate(var(--stack-tilt, 0deg))
+             scale(var(--stack-scale, 0.985));
+
+  transition: transform 220ms ease, width 240ms ease, left 240ms ease, opacity 200ms ease;
   cursor: pointer;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px var(--shadow-lg);
+.card-panel:not(.is-active),
+.card:not(.is-active) {
+  opacity: 0.45;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.95));
+  filter: drop-shadow(0 14px 22px rgba(0,0,0,0.24)) saturate(0.82) brightness(0.94);
+}
+
+.card-panel.is-active,
+.card.is-active {
+  opacity: 1;
+  mask-image: none;
+  filter: none;
+  transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32), 0 0 0 3px rgba(var(--glow-olive), 0.4);
+  z-index: 10;
+  min-width: 62%;
+  min-height: 360px;
+}
+
+.card-panel::after,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--sheet-tint, transparent);
+  mix-blend-mode: multiply;
+  opacity: 0.82;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  border-radius: 12px;
+}
+
+.card-panel.is-active::after,
+.card.is-active::after {
+  opacity: 0;
 }
 
 .card-photo {
   width: 100%;
   height: 250px;
   object-fit: cover;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--border-light) 100%);
+  background: linear-gradient(135deg, #e5e5e5 0%, #d4d4d4 100%);
+  border-radius: 8px;
+  margin-bottom: var(--space-md);
 }
 
 .card-emoji {
@@ -198,20 +309,24 @@ p {
   justify-content: center;
   font-size: 6rem;
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 8px;
+  margin-bottom: var(--space-md);
 }
 
 .card-content {
-  padding: var(--space-lg);
+  padding: 0;
 }
 
 .card-title {
   font-size: 1.75rem;
   margin-bottom: var(--space-sm);
+  color: var(--ink);
 }
 
 .card-subtitle {
   font-family: var(--font-system);
-  color: var(--text-secondary);
+  color: var(--ink);
+  opacity: 0.7;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -220,7 +335,8 @@ p {
 
 .card-tagline {
   font-family: var(--font-hand);
-  color: var(--text-secondary);
+  color: var(--ink);
+  opacity: 0.8;
   font-size: 1.1rem;
   font-style: italic;
 }
@@ -235,9 +351,9 @@ p {
 .tag {
   font-size: 0.85rem;
   padding: var(--space-xs) var(--space-sm);
-  background: var(--bg-secondary);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 999px;
-  color: var(--text-secondary);
+  color: var(--ink);
 }
 
 /* ==================== Detail Panel ==================== */

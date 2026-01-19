@@ -56,6 +56,67 @@
     }
   }
 
+  // ==================== Card Stacking ====================
+  function positionCards() {
+    const animals = state.animals;
+
+    animals.forEach((animal, idx) => {
+      const cardEl = document.querySelector(`[data-animal="${animal.id}"]`);
+      if (!cardEl) return;
+
+      const isActive = idx === 0;
+      const stackIdx = isActive ? 0 : idx;
+
+      // Calculate stacking properties
+      const offsetLeft = isActive ? 0 : 16 + (stackIdx - 1) * 11;
+      const width = isActive ? 100 : Math.max(78 - (stackIdx - 1) * 6, 48);
+      const translateX = isActive ? 0 : 8 + (stackIdx - 1) * 4;
+      const tilt = isActive ? 0 : (stackIdx % 2 === 0 ? -1.35 : 1.35);
+      const scale = isActive ? 1 : Math.max(0.92, 0.97 - (stackIdx - 1) * 0.012);
+
+      // Apply CSS custom properties
+      cardEl.style.setProperty('--card-left', `${offsetLeft}%`);
+      cardEl.style.setProperty('--card-width', `${width}%`);
+      cardEl.style.setProperty('--stack-shift', `${translateX}px`);
+      cardEl.style.setProperty('--stack-tilt', `${tilt}deg`);
+      cardEl.style.setProperty('--stack-scale', scale);
+      cardEl.style.setProperty('--stack-index', stackIdx);
+
+      // Toggle active class
+      cardEl.classList.toggle('is-active', isActive);
+
+      // Apply color tint
+      const tints = [
+        'rgba(120, 164, 214, 0.14)',
+        'rgba(255, 164, 140, 0.14)',
+        'rgba(194, 214, 146, 0.14)',
+        'rgba(168, 196, 176, 0.14)',
+      ];
+      cardEl.style.setProperty('--sheet-tint', tints[idx % tints.length]);
+    });
+
+    // Update deck height
+    const deck = elements.animalsGrid;
+    const activeCard = deck.querySelector('.card.is-active');
+    if (deck && activeCard) {
+      deck.style.height = `${activeCard.offsetHeight + 120}px`;
+    }
+  }
+
+  function handleCardClick(animalId) {
+    const cardIdx = state.animals.findIndex(a => a.id === animalId);
+
+    // Move clicked card to front of array
+    const clickedAnimal = state.animals.splice(cardIdx, 1)[0];
+    state.animals.unshift(clickedAnimal);
+
+    // Reposition all cards
+    positionCards();
+
+    // Load detail content
+    showAnimalDetail(animalId);
+  }
+
   // ==================== Rendering ====================
   function renderAnimalCards() {
     const cardsHTML = state.animals.map(animal => {
@@ -88,9 +149,12 @@
     elements.animalsGrid.querySelectorAll('.card').forEach(card => {
       card.addEventListener('click', () => {
         const animalId = card.dataset.animal;
-        showAnimalDetail(animalId);
+        handleCardClick(animalId);
       });
     });
+
+    // Position cards initially
+    positionCards();
   }
 
   function renderStoryCards() {

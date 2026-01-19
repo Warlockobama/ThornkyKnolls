@@ -9,7 +9,9 @@
     animals: [],
     posts: [],
     currentView: 'animals',
-    currentDetail: null
+    currentCategory: 'cattle',
+    currentDetail: null,
+    activeAnimalId: null // Track which card is enlarged
   };
 
   // ==================== DOM Elements ====================
@@ -28,7 +30,8 @@
     themePanel: document.getElementById('themePanel'),
     accentColor: document.getElementById('accentColor'),
     bgColor: document.getElementById('bgColor'),
-    navLinks: document.querySelectorAll('[data-nav]')
+    navLinks: document.querySelectorAll('[data-nav]'),
+    categoryNavBtns: null // Will be populated after render
   };
 
   // ==================== Data Loading ====================
@@ -115,8 +118,16 @@
     if (!animal) return;
 
     const category = animal.category;
-    const categoryAnimals = state.animals.filter(a => a.category === category);
-    const cardIdx = categoryAnimals.findIndex(a => a.id === animalId);
+
+    // Check if this card is already active/enlarged
+    if (state.activeAnimalId === animalId) {
+      // Second click - open detail panel
+      showAnimalDetail(animalId);
+      return;
+    }
+
+    // First click - enlarge the card
+    state.activeAnimalId = animalId;
 
     // Remove clicked animal from state.animals
     const stateIdx = state.animals.findIndex(a => a.id === animalId);
@@ -135,16 +146,12 @@
 
     // Reposition cards in this category
     positionCards(category);
-
-    // Load detail content
-    showAnimalDetail(animalId);
   }
 
   // ==================== Rendering ====================
   function renderAnimalCards() {
-    // Separate animals by category
-    const cattle = state.animals.filter(a => a.category === 'cattle');
-    const equine = state.animals.filter(a => a.category === 'equine');
+    // Get animals for current category
+    const categoryAnimals = state.animals.filter(a => a.category === state.currentCategory);
 
     // Function to create card HTML
     const createCardHTML = (animal) => {
@@ -171,24 +178,14 @@
       `;
     };
 
-    // Build sections HTML
-    const sectionsHTML = `
-      <div class="category-section">
-        <h2 class="category-title">Highland Cattle</h2>
-        <div class="deck" id="cattle-deck">
-          ${cattle.map(createCardHTML).join('')}
-        </div>
-      </div>
-
-      <div class="category-section">
-        <h2 class="category-title">Horses & Equines</h2>
-        <div class="deck" id="equine-deck">
-          ${equine.map(createCardHTML).join('')}
-        </div>
+    // Build deck HTML for current category
+    const deckHTML = `
+      <div class="deck" id="${state.currentCategory}-deck">
+        ${categoryAnimals.map(createCardHTML).join('')}
       </div>
     `;
 
-    elements.animalsGrid.innerHTML = sectionsHTML;
+    elements.animalsGrid.innerHTML = deckHTML;
 
     // Add click listeners to all cards
     document.querySelectorAll('.card[data-animal]').forEach(card => {
@@ -198,9 +195,8 @@
       });
     });
 
-    // Position cards for each category
-    positionCards('cattle');
-    positionCards('equine');
+    // Position cards for current category
+    positionCards(state.currentCategory);
   }
 
   function renderStoryCards() {
@@ -406,6 +402,25 @@
     elements.aboutSection.classList.toggle('hidden', view !== 'about');
   }
 
+  function switchCategory(category) {
+    state.currentCategory = category;
+    state.activeAnimalId = null; // Reset active card when switching categories
+
+    // Update category nav buttons
+    if (elements.categoryNavBtns) {
+      elements.categoryNavBtns.forEach(btn => {
+        if (btn.dataset.category === category) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Re-render cards for new category
+    renderAnimalCards();
+  }
+
   // ==================== Theme Controls ====================
   function toggleThemePanel() {
     elements.themePanel.classList.toggle('active');
@@ -462,6 +477,15 @@
         e.preventDefault();
         const view = link.dataset.nav;
         switchView(view);
+      });
+    });
+
+    // Category navigation (set up after animals load)
+    elements.categoryNavBtns = document.querySelectorAll('[data-category]');
+    elements.categoryNavBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.dataset.category;
+        switchCategory(category);
       });
     });
 

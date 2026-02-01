@@ -579,7 +579,18 @@
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             manifest = await res.json();
           } catch (err) {
-            manifest = [{ slug: "anabella" }, { slug: "gus" }, { slug: "mabel" }, { slug: "pumpkin" }];
+            manifest = [
+              { slug: "anabella", type: "cattle" },
+              { slug: "gus", type: "cattle" },
+              { slug: "lebella", type: "cattle" },
+              { slug: "pumpkin", type: "cattle" },
+              { slug: "argus", type: "equine" },
+              { slug: "dobby", type: "equine" },
+              { slug: "hugo", type: "equine" },
+              { slug: "mabel", type: "equine" },
+              { slug: "raider", type: "equine" },
+              { slug: "willow", type: "equine" }
+            ];
           }
 
           // Normalize manifest to objects with slug + optional images
@@ -903,9 +914,30 @@
           });
         };
 
+        // Attach click handlers to static cards to trigger story loading
+        const attachStaticCardHandlers = () => {
+          document.querySelectorAll("#panel-herd .card-grid .card, #panel-equine .card-grid .card").forEach(card => {
+            if (!card.dataset.slug) {
+              card.addEventListener("click", async () => {
+                if (!storiesLoaded) {
+                  card.style.opacity = "0.6";
+                  card.style.cursor = "wait";
+                  await loadStories();
+                  card.style.opacity = "";
+                  card.style.cursor = "";
+                }
+              });
+            }
+          });
+        };
+
         attachDetailControls();
         attachCarouselControls();
+        attachStaticCardHandlers();
         setupColorLab();
+
+        // Always preload stories for better UX
+        loadStories();
 
         document.addEventListener("keydown", (event) => {
           if (event.key !== "Escape") return;

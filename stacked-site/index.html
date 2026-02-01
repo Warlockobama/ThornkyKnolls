@@ -363,10 +363,26 @@
         let fragmentData = [];
         let resizeObserver = null;
         let observedCard = null;
+        const attachGalleryHandlers = (container) => {
+          const gallery = container.querySelector(".journal-gallery");
+          if (!gallery) return;
+          const hero = gallery.querySelector(".journal-gallery__main img");
+          const thumbs = gallery.querySelectorAll(".journal-gallery__thumbs img");
+          if (!hero || !thumbs.length) return;
+          thumbs.forEach(thumb => {
+            thumb.style.cursor = "pointer";
+            thumb.addEventListener("click", () => {
+              hero.src = thumb.src;
+              thumbs.forEach(t => t.classList.remove("is-active"));
+              thumb.classList.add("is-active");
+            });
+          });
+        };
         const updateDetail = (html) => {
           if (!detail) return;
           detail.innerHTML = html;
           detail.scrollTop = 0;
+          attachGalleryHandlers(detail);
         };
         const colorToHex = (value) => {
           if (!value) return "#000000";
@@ -437,6 +453,7 @@
           const content = detailEl.querySelector(".detail-content");
           if (content && html) {
             content.innerHTML = html;
+            attachGalleryHandlers(content);
           }
           detailEl.classList.add("is-open");
           detailEl.setAttribute("aria-hidden", "false");

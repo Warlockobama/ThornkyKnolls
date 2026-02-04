@@ -369,13 +369,17 @@
           const hero = gallery.querySelector(".journal-gallery__main img");
           const thumbs = gallery.querySelectorAll(".journal-gallery__thumbs img");
           if (!hero || !thumbs.length) return;
-          thumbs.forEach(thumb => {
+          gallery.dataset.handlersAttached = 'true';
+          thumbs.forEach((thumb) => {
             thumb.style.cursor = "pointer";
-            thumb.addEventListener("click", () => {
+            thumb.onclick = (event) => {
+              event.stopPropagation();
+              event.preventDefault();
               hero.src = thumb.src;
+              hero.alt = thumb.alt || hero.alt;
               thumbs.forEach(t => t.classList.remove("is-active"));
               thumb.classList.add("is-active");
-            });
+            };
           });
         };
         const updateDetail = (html) => {

@@ -835,6 +835,53 @@ h3 {
   display: flex;
 }
 
+/* Show gallery thumbs in animal detail panels */
+.detail-content .journal-gallery__main img {
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.detail-content .journal-gallery__thumbs {
+  display: flex;
+  position: relative;
+  z-index: 10;
+}
+
+.detail-content .journal-gallery__thumbs img {
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+}
+
+.detail-content .journal-gallery__thumbs img:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.detail-content .journal-gallery__thumbs img.is-active {
+  outline: 3px solid var(--accent, #e07c5c);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* Also ensure story-detail gallery thumbs work */
+.story-detail .journal-gallery__thumbs {
+  display: flex !important;
+  position: relative;
+  z-index: 10;
+}
+
+.story-detail .journal-gallery__thumbs img {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.story-detail .journal-gallery__thumbs img.is-active {
+  outline: 3px solid var(--accent, #e07c5c);
+  outline-offset: 2px;
+}
+
 .story-skeleton,
 .story-error {
   padding: 16px;

@@ -785,24 +785,11 @@ h3 {
   white-space: nowrap;
 }
 
-.story-hero {
-  margin: 0;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-}
-
-.story-hero img {
-  display: block;
-  width: 100%;
+.story-portrait--tall img {
+  width: 180px;
   height: auto;
+  border-radius: 10px;
   object-fit: cover;
-  max-height: 240px;
-}
-
-.section__header--story {
-  display: grid;
-  gap: 16px;
 }
 
 .story-grid {

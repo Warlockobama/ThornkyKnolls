@@ -787,10 +787,13 @@ h3 {
 
 .story-portrait--tall {
   flex-shrink: 0;
-  width: 160px;
-  height: 280px;
+  width: 140px;
+  height: 220px;
   overflow: hidden;
   border-radius: 10px;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 0;
 }
 
 .story-portrait--tall img {
@@ -828,6 +831,8 @@ h3 {
 
 .story-portrait img {
   width: 140px;
+  max-height: 220px;
+  object-fit: cover;
   border-radius: 10px;
   border: 2px solid var(--border);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

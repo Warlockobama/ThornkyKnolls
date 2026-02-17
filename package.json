@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^2.1.30",
+    "claude": "^0.1.2"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.37.1"
+  }
+}

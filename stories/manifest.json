@@ -1,0 +1,205 @@
+[
+  {
+    "slug": "adele",
+    "type": "cattle",
+    "images": [
+      "images/optimized/Adele-1600w.webp",
+      "images/optimized/labella-lineage.png",
+      "images/optimized/trillium-lineage.png",
+      "images/optimized/Adele2-1600w.webp",
+      {
+        "path": "images/optimized/Adele_and_LaBella-1600w.webp",
+        "also": [
+          "lebella"
+        ]
+      },
+      {
+        "path": "images/optimized/Adele_and_bullcalf-1600w.webp",
+        "also": [
+          "bull-calf"
+        ]
+      },
+      {
+        "path": "images/optimized/Adele_pumpkin_brg-1600w.webp",
+        "also": [
+          "pumpkin"
+        ]
+      },
+      "images/optimized/Adele_calf_new-1600w.webp",
+      "images/optimized/Adele_snow-1600w.webp",
+      "images/optimized/Adele_snow_front-1600w.webp",
+      {
+        "path": "images/optimized/Adele_and_bullcalf_snow_tracks-1600w.webp",
+        "also": [
+          "bull-calf"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "anabella",
+    "type": "cattle",
+    "images": [
+      "images/optimized/Annabella-1600w.webp",
+      "images/optimized/labella-lineage.png",
+      "images/optimized/trillium-lineage.png",
+      "images/optimized/Annabella1-1600w.webp",
+      "images/optimized/Annabella2-1600w.webp",
+      "images/optimized/Annabella3-1600w.webp",
+      "images/optimized/Annabella4-1600w.webp",
+      "images/optimized/Annabella_PXL_20251007-1600w.webp",
+      "images/optimized/Annabella_snow-1600w.webp",
+      "images/optimized/Annabella_front1-1600w.webp",
+      "images/optimized/Annabella_front2.jpg-1600w.webp",
+      {
+        "path": "images/optimized/LaBella\u0026Anabella1-1600w.webp",
+        "also": [
+          "lebella"
+        ]
+      },
+      "images/optimized/PXL_20250428_182047395-1600w.webp",
+      "images/optimized/PXL_20250428_182049956-1600w.webp",
+      "images/optimized/PXL_20250428_182054162.MP-1600w.webp",
+      "images/optimized/PXL_20250515_115329319.MP-1600w.webp",
+      "images/optimized/PXL_20250526_003928788.NIGHT-1600w.webp",
+      "images/optimized/PXL_20250526_003931815.NIGHT-1600w.webp",
+      "images/optimized/PXL_20250605_165057115-1600w.webp",
+      "images/optimized/PXL_20250706_212750221.MP-1600w.webp",
+      "images/optimized/PXL_20250706_212751879.MP-1600w.webp",
+      "images/optimized/PXL_20250706_212801478.MP-1600w.webp",
+      "images/optimized/PXL_20250721_130915936-1600w.webp",
+      "images/optimized/PXL_20250721_130920910-1600w.webp",
+      "images/optimized/PXL_20250721_130941536-1600w.webp",
+      "images/optimized/PXL_20251007_203944770-1600w.webp"
+    ]
+  },
+  {
+    "slug": "bull-calf",
+    "type": "cattle",
+    "images": [
+      "images/optimized/Bullcalf-1600w.webp",
+      "images/optimized/pumpkin-spice-lineage.png",
+      "images/optimized/trillium-lineage.png",
+      "images/optimized/Bullcalf2-1600w.webp",
+      "images/optimized/Bullcalf_side-1600w.webp",
+      "images/optimized/Bullcalf_side2-1600w.webp",
+      "images/optimized/Bullcalf_side3-1600w.webp",
+      "images/optimized/Bullcalf_rear-1600w.webp",
+      "images/optimized/Bullcalf_rear_right-1600w.webp",
+      "images/optimized/Bullcalf_side_shed-1600w.webp",
+      "images/optimized/Bullcalf_snow_front-1600w.webp",
+      "images/optimized/Bullcalf_side_snow-1600w.webp",
+      {
+        "path": "images/optimized/Pumpkin_and_bullcalf-1600w.webp",
+        "also": [
+          "pumpkin"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "lebella",
+    "type": "cattle",
+    "images": [
+      "images/optimized/LaBella-1600w.webp",
+      "images/optimized/labella-lineage.png",
+      "images/optimized/Labella-Side-1600w.webp",
+      {
+        "path": "images/optimized/LaBella_and_Adele-1600w.webp",
+        "also": [
+          "adele"
+        ]
+      },
+      {
+        "path": "images/optimized/LaBella_Pumpkin_Anabella_christmastree-1600w.webp",
+        "also": [
+          "pumpkin",
+          "anabella"
+        ]
+      },
+      {
+        "path": "images/optimized/LaBella\u0026Anabella1-1600w.webp",
+        "also": [
+          "anabella"
+        ]
+      },
+      {
+        "path": "images/optimized/LaBella\u0026Anabella2-1600w.webp",
+        "also": [
+          "anabella"
+        ]
+      },
+      {
+        "path": "images/optimized/LaBella\u0026Anabella3-1600w.webp",
+        "also": [
+          "anabella"
+        ]
+      },
+      {
+        "path": "images/optimized/Labella_side_hiddenAnabella-1600w.webp",
+        "also": [
+          "anabella"
+        ]
+      },
+      "images/optimized/PXL_20250428_182039240-1600w.webp",
+      "images/optimized/PXL_20250428_182041087-1600w.webp"
+    ]
+  },
+  {
+    "slug": "pumpkin",
+    "type": "cattle",
+    "images": [
+      "images/optimized/Pumpkin_front1-1600w.webp",
+      "images/optimized/pumpkin-spice-lineage.png",
+      "images/optimized/Pumpkin_side1-1600w.webp",
+      {
+        "path": "images/optimized/Pumpkin_and_bullcalf-1600w.webp",
+        "also": [
+          "bull-calf"
+        ]
+      },
+      {
+        "path": "images/optimized/Pumpkin_and_LaBella-1600w.webp",
+        "also": [
+          "lebella"
+        ]
+      },
+      "images/optimized/Pumpkin_in_snow-1600w.webp",
+      {
+        "path": "images/optimized/Pumpkin_and_bella_snowfall-1600w.webp",
+        "also": [
+          "lebella"
+        ]
+      },
+      "images/optimized/Pumpkin_icey-1600w.webp",
+      {
+        "path": "images/optimized/Trillium_Pumpkin_laBella-1600w.webp",
+        "also": [
+          "lebella"
+        ]
+      },
+      "images/optimized/PXL_20250428_182018564-1600w.webp",
+      "images/optimized/PXL_20250515_115326954-1600w.webp"
+    ]
+  },
+  {
+    "slug": "morning-rounds",
+    "type": "note",
+    "animals": [
+      "pumpkin",
+      "lebella",
+      "adele"
+    ],
+    "date": "2026-01-15"
+  },
+  {
+    "slug": "first-snow",
+    "type": "note",
+    "animals": [
+      "anabella",
+      "bull-calf",
+      "pumpkin"
+    ],
+    "date": "2025-12-08"
+  }
+]

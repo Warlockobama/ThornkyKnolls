@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin — Thorny Knolls</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐄</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    fetch("/api/config").then(r=>r.json()).then(c=>{
+      if(c.umamiUrl&&c.umamiWebsiteId){
+        const s=document.createElement("script");
+        s.defer=true;s.src=c.umamiUrl+"/script.js";
+        s.dataset.websiteId=c.umamiWebsiteId;
+        document.head.appendChild(s);
+      }
+    }).catch(()=>{});
+  </script>
+  <style>
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+    }
+    .admin-page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .admin-header h1 {
+      font-family: "Barlow Condensed", sans-serif;
+      color: var(--paper);
+      margin: 0;
+    }
+    .admin-header a {
+      color: var(--accent);
+      text-decoration: none;
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 1000px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .admin-panel {
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 8px 8px 0 rgba(10, 20, 17, 0.5);
+    }
+    .admin-panel h2 {
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: "Spectral", serif;
+      font-size: 15px;
+      background: #fefcf7;
+    }
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(199, 223, 106, 0.3);
+    }
+    .emoji-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .image-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .image-upload-area:hover {
+      border-color: var(--accent);
+      background: rgba(199, 223, 106, 0.1);
+    }
+    .image-upload-area.dragover {
+      border-color: var(--accent);
+      background: rgba(199, 223, 106, 0.2);
+    }
+    .image-upload-area input {
+      display: none;
+    }
+    .image-upload-area p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .image-previews {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .image-preview {
+      position: relative;
+      width: 100px;
+      height: 75px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .image-preview button {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 20px;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 4px 4px 0 rgba(10, 20, 17, 0.3);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 rgba(10, 20, 17, 0.4);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+    .btn-secondary {
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .preview-content {
+      min-height: 400px;
+    }
+    .preview-content .journal-entry {
+      position: relative;
+    }
+    .output-section {
+      margin-top: 24px;
+    }
+    .output-section h3 {
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 14px;
+      margin: 0 0 8px;
+      color: var(--muted);
+    }
+    .output-box {
+      background: #1a1a1a;
+      color: #e0e0e0;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 200px;
+      overflow: auto;
+    }
+    .status-message {
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+    .status-message.success {
+      background: rgba(31, 92, 45, 0.2);
+      color: #1f5c2d;
+      border: 1px solid #1f5c2d;
+    }
+    .status-message.error {
+      background: rgba(178, 57, 36, 0.2);
+      color: #b23924;
+      border: 1px solid #b23924;
+    }
+    .animal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .animal-tags label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: "Spectral", serif;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .animal-tags input[type="checkbox"] {
+      accent-color: var(--accent);
+    }
+    .hidden {
+      display: none !important;
+    }
+    .entry-list {
+      margin-bottom: 24px;
+    }
+    .entry-list-items {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .entry-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: "Spectral", serif;
+      font-size: 14px;
+    }
+    .entry-list-item:last-child {
+      border-bottom: none;
+    }
+    .entry-list-item:hover {
+      background: rgba(199, 223, 106, 0.12);
+    }
+    .entry-list-item.is-active {
+      background: rgba(199, 223, 106, 0.25);
+    }
+    .entry-list-item .entry-slug {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 8px;
+    }
+    .entry-list-item .entry-type {
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--border);
+      color: var(--ink);
+    }
+    .entry-list-empty {
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .edit-mode-banner {
+      background: rgba(199, 223, 106, 0.3);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 13px;
+    }
+    .edit-mode-banner button {
+      background: none;
+      border: 1px solid var(--ink);
+      border-radius: 4px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: "Barlow Condensed", sans-serif;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+    .btn-danger {
+      background: #b23924;
+      color: white;
+      border-color: #8a2c1b;
+    }
+    .btn-save {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+    .server-images {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .server-image {
+      position: relative;
+      width: 100px;
+      height: 75px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      opacity: 0.7;
+    }
+    .server-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .server-image .label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 9px;
+      text-align: center;
+      padding: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="admin-page">
+    <header class="admin-header">
+      <h1>Content Admin</h1>
+      <a href="index.html">Back to Site</a>
+    </header>
+
+    <div class="admin-layout">
+      <div class="admin-panel">
+        <div class="entry-list" id="entryListSection">
+          <h2>Entries</h2>
+          <div class="entry-list-items" id="entryListItems">
+            <div class="entry-list-empty">Loading entries...</div>
+          </div>
+        </div>
+
+        <div id="editModeBanner" class="edit-mode-banner hidden">
+          <span>Editing: <strong id="editingSlugLabel"></strong></span>
+          <button type="button" id="cancelEditBtn">Cancel Edit</button>
+        </div>
+
+        <h2 id="formHeading">Add New Entry</h2>
+        <form id="entryForm" class="form-grid">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="entryType">Type</label>
+              <select id="entryType" name="type" required>
+                <option value="cattle">Cattle (Highland)</option>
+                <option value="note">Field Note</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="entrySlug">Slug (URL-safe ID)</label>
+              <input type="text" id="entrySlug" name="slug" placeholder="auto-generated" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="entryTitle">Title</label>
+              <input type="text" id="entryTitle" name="title" placeholder="The Velvet General" required />
+            </div>
+            <div class="form-group">
+              <label for="entrySubtitle">Subtitle</label>
+              <input type="text" id="entrySubtitle" name="subtitle" placeholder="Pumpkin's Morning Briefings" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="entryDate">Date Line</label>
+            <input type="text" id="entryDate" name="date" placeholder="Early Spring · Field Log 01" />
+          </div>
+
+          <div class="emoji-row">
+            <div class="form-group">
+              <label for="entryEmoji">Photo Emoji</label>
+              <input type="text" id="entryEmoji" name="emoji" value="" />
+            </div>
+            <div class="form-group">
+              <label for="entryDoodle1">Doodle 1</label>
+              <input type="text" id="entryDoodle1" name="doodle1" value="" />
+            </div>
+            <div class="form-group">
+              <label for="entryDoodle2">Doodle 2</label>
+              <input type="text" id="entryDoodle2" name="doodle2" value="" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="entryCaption">Photo Caption</label>
+            <input type="text" id="entryCaption" name="caption" placeholder="Pumpkin holding court beside the cedar windbreak" />
+          </div>
+
+          <div class="form-group">
+            <label for="entryContent">Content (separate paragraphs with blank lines)</label>
+            <textarea id="entryContent" name="content" rows="8" placeholder="First paragraph about the animal or story...
+
+Second paragraph continues the narrative...
+
+Third paragraph wraps things up..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="entryFacts">Facts/Notes (one per line)</label>
+            <textarea id="entryFacts" name="facts" rows="5" placeholder="Favorite garnish: Apple slices dusted with rolled oats
+Secret talent: Opening the creek gate with one horn twist
+Preferred weather: Overcast and cool
+Trusted accomplice: Lebella during storm inspections
+Motto: &quot;Squared shoulders, steady herd.&quot;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="entrySignature">Signature</label>
+            <input type="text" id="entrySignature" name="signature" placeholder="Logged by the dawn shift wrangler" />
+          </div>
+
+          <div class="form-group" id="animalTagGroup">
+            <label>Tag Animals</label>
+            <div class="animal-tags" id="animalTags">
+              <label><input type="checkbox" name="animals" value="adele" /> Adele</label>
+              <label><input type="checkbox" name="animals" value="anabella" /> Anabella</label>
+              <label><input type="checkbox" name="animals" value="bull-calf" /> Bull Calf</label>
+              <label><input type="checkbox" name="animals" value="lebella" /> Lebella</label>
+              <label><input type="checkbox" name="animals" value="pumpkin" /> Pumpkin</label>
+            </div>
+          </div>
+
+          <div class="form-group" id="imageUploadGroup">
+            <label>Images (drag & drop or click)</label>
+            <div class="image-upload-area" id="imageUploadArea">
+              <input type="file" id="imageInput" accept="image/*" multiple />
+              <p>Drop images here or click to select (max 3)</p>
+            </div>
+            <div class="image-previews" id="imagePreviews"></div>
+          </div>
+
+          <div id="serverImagesSection" class="form-group hidden">
+            <label>Existing Server Images</label>
+            <div class="server-images" id="serverImages"></div>
+          </div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-save" id="saveBtn">Save to Server</button>
+            <button type="button" class="btn btn-danger hidden" id="deleteBtn">Delete Entry</button>
+            <button type="button" class="btn btn-primary" id="generateBtn">Generate</button>
+            <button type="button" class="btn btn-secondary" id="downloadHtmlBtn">Download HTML</button>
+            <button type="button" class="btn btn-secondary" id="downloadImagesBtn">Download Images</button>
+            <button type="button" class="btn btn-secondary" id="clearBtn">Clear Form</button>
+          </div>
+
+          <div id="statusMessage" class="status-message hidden"></div>
+        </form>
+      </div>
+
+      <div class="admin-panel">
+        <h2>Preview</h2>
+        <div class="preview-content" id="previewContent">
+          <p style="color: var(--muted); text-align: center; padding: 40px;">Fill out the form to see a preview</p>
+        </div>
+
+        <div class="output-section">
+          <h3>Manifest Entry (add to stories/manifest.json)</h3>
+          <div class="output-box" id="manifestOutput">{}</div>
+        </div>
+
+        <div class="output-section">
+          <h3>HTML Output (save as stories/{slug}.html)</h3>
+          <div class="output-box" id="htmlOutput"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+thornyknolls.com {
+	# Main site
+	reverse_proxy app:8080
+
+	# Umami analytics at /umami subpath
+	handle_path /umami/* {
+		reverse_proxy umami:3000
+	}
+}
+
+www.thornyknolls.com {
+	redir https://thornyknolls.com{uri} permanent
+}

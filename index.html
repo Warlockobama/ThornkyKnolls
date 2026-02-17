@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thorny Knolls — Highland Herd & Field Notes</title>
+  <meta name="description" content="Highland cattle genetics from the Shenandoah foothills. Thorny Knolls — Warrenton, Virginia." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐄</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rokkitt:wght@500;600;700&family=Bitter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Zilla+Slab:wght@500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Umami analytics — configured via /api/config
+    fetch("/api/config").then(r=>r.json()).then(c=>{
+      if(c.umamiUrl&&c.umamiWebsiteId){
+        const s=document.createElement("script");
+        s.defer=true;s.src=c.umamiUrl+"/script.js";
+        s.dataset.websiteId=c.umamiWebsiteId;
+        document.head.appendChild(s);
+      }
+    }).catch(()=>{});
+  </script>
+</head>
+<body>
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="page">
+    <header class="masthead">
+      <div class="mark" data-section="home">
+        <div class="mark__title">Thorny Knolls</div>
+        <div class="mark__lines">
+          <span>Highland cattle</span>
+          <span>Silvopasture</span>
+          <span>Highland genetics</span>
+        </div>
+        <div class="mark__tagline">Shenandoah foothills / Warrenton, Virginia</div>
+        <div class="mark__hint" aria-hidden="true">← Home</div>
+      </div>
+      <nav class="nav" aria-label="Site index">
+        <button class="nav__link is-active" id="nav-home" aria-controls="panel-home" data-tab="home" type="button">Home / Overview</button>
+        <button class="nav__link" id="nav-herd" aria-controls="panel-herd" data-tab="herd" type="button">The Fold</button>
+        <button class="nav__link" id="nav-story" aria-controls="panel-story" data-tab="story" type="button">Our Story</button>
+        <button class="nav__link" id="nav-notes" aria-controls="panel-notes" data-tab="notes" type="button">Field Notes</button>
+      </nav>
+    </header>
+
+    <main class="spa-shell">
+      <div class="tab-bar" role="tablist" aria-label="Sections">
+        <button class="tab-button is-active" id="tab-home" role="tab" aria-selected="true" aria-controls="panel-home" data-tab="home" type="button">Home / Overview</button>
+        <button class="tab-button" id="tab-herd" role="tab" aria-selected="false" aria-controls="panel-herd" data-tab="herd" type="button">The Fold</button>
+        <button class="tab-button" id="tab-story" role="tab" aria-selected="false" aria-controls="panel-story" data-tab="story" type="button">Our Story</button>
+        <button class="tab-button" id="tab-notes" role="tab" aria-selected="false" aria-controls="panel-notes" data-tab="notes" type="button">Field Notes</button>
+      </div>
+
+      <div class="deck" id="deck">
+        <article class="sheet sheet--primary sheet--hero card-panel is-active" data-card="home" id="panel-home" role="tabpanel" aria-labelledby="tab-home" tabindex="0">
+          <header class="sheet__header">
+            <p class="eyebrow">Highland genetics from the Shenandoah foothills</p>
+            <h1>Quality Highland cattle, raised with intention</h1>
+          </header>
+          <div class="sheet__body sheet__body--two">
+            <div class="copy">
+              <p>Thorny Knolls sits in the foothills of the Shenandoah, just outside Warrenton, Virginia. We're a small operation focused on producing desirable Highland genetics — healthy calves with good temperament, classic coats, and solid conformation.</p>
+              <p>Low-volume and hands-on. Every animal is handled daily, raised on grass, and bred with intention. If you're looking for quality Highland stock, you're in the right place.</p>
+              <div class="chips">
+                <span class="chip">Highland cattle sales</span>
+                <span class="chip">Warrenton, Virginia</span>
+                <span class="chip">Low-volume, hands-on</span>
+              </div>
+              <div class="cta-row">
+                <button class="button button--solid" type="button" data-tab="herd" data-filter="sale">See cattle for sale</button>
+                <button class="button" type="button" data-tab="herd">The Fold</button>
+              </div>
+              <button class="text-link" type="button" data-tab="story">Our story -></button>
+              <div class="contact-line">
+                <p>Questions about our herd or available cattle? <a href="mailto:James@thornyknolls.com">James@thornyknolls.com</a></p>
+              </div>
+            </div>
+            <figure class="visual-card">
+              <div class="image-frame">
+                <img src="assets/hero-pumpkin.webp" alt="Red Highland cow grazing on green pasture" loading="lazy" />
+              </div>
+              <figcaption>Pumpkin on the front pasture — Thorny Knolls, Warrenton VA</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="sheet sheet--primary card-panel" data-card="herd" id="panel-herd" role="tabpanel" aria-labelledby="tab-herd" tabindex="-1">
+          <header class="section__header">
+            <div>
+              <p class="eyebrow">The fold / register</p>
+              <h2>Highland fold in residence</h2>
+              <p class="muted">A quick headcount and a few personalities from the pasture.</p>
+            </div>
+            <div class="section__actions">
+              <div class="chips">
+                <span class="chip">Docile & horned</span>
+                <span class="chip">Cold-hardy</span>
+                <span class="chip">Handled daily</span>
+              </div>
+              <div class="section-controls" data-section="herd">
+                <button class="arrow-button" type="button" data-dir="prev" aria-label="Previous Highland animals">‹</button>
+                <button class="arrow-button" type="button" data-dir="next" aria-label="Next Highland animals">›</button>
+              </div>
+            </div>
+          </header>
+          <div class="card-grid">
+            <div class="story-skeleton">Loading herd…</div>
+          </div>
+          <div class="animal-detail" id="herd-detail" aria-hidden="true">
+            <button class="detail-close" type="button">Close</button>
+            <div class="detail-content"></div>
+          </div>
+          <div class="register-filters" id="herd-filters">
+            <button class="chip chip--filter chip--active" type="button" data-filter-status="all">All</button>
+            <button class="chip chip--filter" type="button" data-filter-status="sale">For sale / trade</button>
+          </div>
+          <table class="register">
+            <thead>
+              <tr class="register__head">
+                <th></th>
+                <th>Animal</th>
+                <th>Color</th>
+                <th>Born / Lineage</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="herd-register">
+              <tr class="register__row register__row--empty">
+                <td colspan="6">Loading herd register…</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="sheet sheet--primary card-panel" data-card="story" id="panel-story" role="tabpanel" aria-labelledby="tab-story" tabindex="-1">
+          <header class="section__header">
+            <div>
+              <p class="eyebrow">Our story</p>
+              <h2>A family ranch, a family name</h2>
+              <p class="muted">Thorny Knolls is a family operation in the Shenandoah foothills, built on hard work, humor, and a deep love of animals.</p>
+            </div>
+          </header>
+          <div class="story-grid">
+            <article class="story-block story-block--portrait">
+              <figure class="story-portrait">
+                <img src="assets/thorny-thistle.png" alt="Michael 'Thorny' Thistle" loading="lazy" />
+                <figcaption>Michael "Thorny" Thistle</figcaption>
+              </figure>
+              <div>
+                <h3>The name behind the name</h3>
+                <p>The name "Thorny" is a tribute to our late grandfather, Michael "Thorny" Thistle, and our grandmother, Bonnie Thistle. Thorny was a hard-working, blue-collar man who did all kinds of jobs — from owning a bait shop to plumbing, where he retired as a proud member of the plumbers union. We wish he was here to share our beautiful ranch, but we keep his spirit alive through hard work, humor, and a love of animals.</p>
+              </div>
+            </article>
+            <article class="story-block">
+              <h3>A natural bond</h3>
+              <p>Bonnie was a kind soul who had a special bond with animals. As a child, she made the local paper for taming a squirrel — and that gentle, patient way with animals runs through everything we do at Thorny Knolls. It's in the way we handle our cattle daily, how we raise every calf with care, and why we believe good temperament starts with good people.</p>
+            </article>
+            <article class="story-block">
+              <h3>What we do</h3>
+              <p>We're a small family ranch focused on producing excellent Highland genetics. Our fold is raised on grass in Warrenton, Virginia, handled daily, and bred with intention. We focus on desirable traits — classic coats, solid conformation, and calm temperament — so that every calf that leaves here is something we're proud of.</p>
+            </article>
+          </div>
+        </article>
+
+        <article class="sheet sheet--primary card-panel" data-card="notes" id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" tabindex="-1">
+          <header class="section__header">
+            <div>
+              <p class="eyebrow">Field notes</p>
+              <h2>Journal entries from the pasture</h2>
+              <p class="muted">Selected stories pulled from the field log — snapshots of daily life with the herd.</p>
+            </div>
+            <div class="chips">
+              <span class="chip">Pasture log</span>
+              <span class="chip">Herd snapshots</span>
+              <span class="chip">Light reading</span>
+            </div>
+          </header>
+          <div class="notes-filters" id="notes-filters"></div>
+          <div class="stories-layout">
+            <div class="stories-grid" id="story-entries" aria-live="polite">
+              <div class="story-skeleton">Loading field notes…</div>
+            </div>
+            <div class="story-detail" id="story-detail">
+              <div class="story-skeleton">Select a field note to read.</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </main>
+    <script src="js/main.js"></script>
+  </div>
+</body>
+</html>

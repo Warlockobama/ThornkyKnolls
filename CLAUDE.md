@@ -14,6 +14,8 @@ Thorny Knolls is a hybrid animal profile + blog post website featuring farm anim
 - **Data**: JSON file (`data/posts.json`) for blog post metadata and animal tags
 - **Fonts**: Google Fonts (Patrick Hand, Abril Fatface, Georgia)
 - **Design Pattern**: Hybrid static + dynamic content with HTMX overlays
+- **The Pasture** (`pasture/index.html`): a self-contained animated scene
+  (vanilla JS + inline-SVG sprites, no HTMX) reached from the Chapter 3 card
 
 ## Key Features & Components
 
@@ -48,6 +50,25 @@ Farm stories featuring multiple animals:
 - **Feeding Frenzy** - Dinner time chaos with Argus, Willow, Sega
 - **Sunset Shenanigans** - Evening fun with Anabella, Hugo, Smoke
 
+### The Pasture (`pasture/index.html`)
+A standalone, self-contained animated scene (Chapter 3 on the homepage). It does
+NOT use HTMX or the shared `test.html` styles — it is one ~2200-line file with
+its own CSS and vanilla-JS simulation. Highlights:
+- **Two paddocks** split by a fence: the five Highland cattle on the left, the
+  donkeys/mule/draft horse on the right. Each animal is bounded to its paddock.
+- **Inline-SVG sprites** (no emoji): Highland cattle with horns + shaggy fringe,
+  long-eared donkeys, a mule, a draft horse — each with its own coat palette.
+- **Live sky** interpolated from the viewer's clock (sun/moon arc, stars) and
+  **date-seeded weather** (same calendar day → same sky).
+- **Personality-driven behavior** state machine per animal (graze/wander/follow/
+  rest/pose/stubborn/adventure/feed) with contextual speech bubbles.
+- **Feeding game**: a "Harvest" timing mini-game earns hay; "Drop hay" places a
+  pile that the nearest pasture-mates come and eat. Hay stock + fed count persist
+  in `localStorage`.
+- **Pasture Journal**: logs notable moments (speech, encounters, feeding, time of
+  day) and persists across visits via `localStorage`.
+- Clicking an animal opens a card linking to its `animals/{id}/index.html` page.
+
 ## File Structure
 
 ```
@@ -71,6 +92,9 @@ Farm stories featuring multiple animals:
 │   ├── morning-chores/index.html
 │   ├── feeding-frenzy/index.html
 │   └── sunset-trouble/index.html
+│
+├── pasture/                        # Chapter 3: live animated pasture (standalone)
+│   └── index.html                  # Self-contained scene, sim, and feeding game
 │
 ├── data/
 │   └── posts.json                  # Post metadata with animal tags

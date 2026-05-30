@@ -20,5 +20,7 @@ COPY assets/ ./assets/
 # Seed it with the HTML files so the container has initial content.
 COPY stories/*.html stories/manifest.json ./stories/
 
+COPY pasture/ ./pasture/
+
 EXPOSE 8080
 CMD ["./thornyknolls"]

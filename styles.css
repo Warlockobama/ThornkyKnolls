@@ -857,6 +857,75 @@ h3 {
   }
 }
 
+.card--pasture {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+  margin-bottom: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  min-height: 140px;
+  cursor: pointer;
+  background: var(--paper);
+}
+
+.card--pasture:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.32);
+}
+
+.card--pasture__scene {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #a8d8f0 0%, #c5e8a0 55%, #7faa50 100%);
+}
+
+.card--pasture__hill {
+  position: absolute;
+  bottom: 0;
+  left: -10%;
+  width: 120%;
+  height: 55%;
+  background: radial-gradient(ellipse 100% 80% at 50% 100%, #6fae4a, #a8cf72);
+  border-radius: 50% 50% 0 0;
+}
+
+.card--pasture__animal {
+  position: absolute;
+  font-size: 1.6rem;
+  bottom: 18%;
+  animation: pasture-wander 6s ease-in-out infinite alternate;
+}
+
+.card--pasture__animal--1 { left: 15%; animation-delay: 0s; }
+.card--pasture__animal--2 { left: 45%; animation-delay: -2s; }
+.card--pasture__animal--3 { left: 68%; animation-delay: -4s; }
+
+@keyframes pasture-wander {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-5px); }
+}
+
+.card--pasture__body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+.card--pasture__body h3 {
+  margin: 0;
+}
+
+.card--pasture__body .muted {
+  margin: 0;
+}
+
 .stories-layout {
   display: grid;
   grid-template-columns: 1.05fr 1.25fr;

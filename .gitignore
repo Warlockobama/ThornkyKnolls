@@ -10,6 +10,9 @@ desktop.ini
 *.swo
 *~
 
+# Claude Code / local agent tooling
+.claude/
+
 # Logs
 *.log
 npm-debug.log*

@@ -145,7 +145,7 @@
           <div class="story-grid">
             <article class="story-block story-block--portrait">
               <figure class="story-portrait">
-                <img src="assets/thorny-thistle.png" alt="Michael 'Thorny' Thistle" loading="lazy" />
+                <img src="assets/thorny-thistle.png" alt="Michael 'Thorny' Thistle" loading="lazy" data-lightbox="assets/thorny-thistle.png" />
                 <figcaption>Michael "Thorny" Thistle</figcaption>
               </figure>
               <div>
@@ -155,7 +155,7 @@
             </article>
             <article class="story-block story-block--portrait">
               <figure class="story-portrait">
-                <img src="https://thornyknolls.hel1.your-objectstorage.com/images/optimized/squirrel-newspaper-1600w.webp" alt="Newspaper clipping: Bonnie Thistle as a child with her tame squirrel Frisky" loading="lazy" />
+                <img src="https://thornyknolls.hel1.your-objectstorage.com/images/optimized/squirrel-newspaper-1600w.webp" alt="Newspaper clipping: Bonnie Thistle as a child with her tame squirrel Frisky" loading="lazy" data-lightbox="https://thornyknolls.hel1.your-objectstorage.com/images/optimized/squirrel-newspaper-1600w.webp" />
                 <figcaption>Bonnie Thistle and Frisky — from the local paper</figcaption>
               </figure>
               <div>
@@ -165,7 +165,7 @@
             </article>
             <article class="story-block story-block--portrait">
               <figure class="story-portrait story-portrait--tall">
-                <img src="https://thornyknolls.hel1.your-objectstorage.com/images/optimized/barn-thistle-1600w.webp" alt="Thistle growing against the barn wall at Thorny Knolls" loading="lazy" />
+                <img src="https://thornyknolls.hel1.your-objectstorage.com/images/optimized/barn-thistle-1600w.webp" alt="Thistle growing against the barn wall at Thorny Knolls" loading="lazy" data-lightbox="https://thornyknolls.hel1.your-objectstorage.com/images/optimized/barn-thistle-1600w.webp" />
               </figure>
               <div>
                 <h3>What we do</h3>
@@ -201,6 +201,10 @@
 
       </div>
     </main>
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button class="lightbox__close" type="button" aria-label="Close">&times;</button>
+      <img class="lightbox__img" src="" alt="" />
+    </div>
     <script src="js/main.js"></script>
   </div>
 </body>

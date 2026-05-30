@@ -231,8 +231,8 @@
   const getAnimalName = (slug) => {
     const names = {
       adele: "Adele",
-      anabella: "Anabella",
-      "bull-calf": "Bull Calf",
+      annabel: "Annabel",
+      "bull-calf": "Ness",
       lebella: "Lebella",
       pumpkin: "Pumpkin"
     };
@@ -447,7 +447,7 @@
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       manifest = await res.json();
     } catch (err) {
-      manifest = [{ slug: "anabella" }, { slug: "pumpkin" }];
+      manifest = [{ slug: "annabel" }, { slug: "pumpkin" }];
     }
 
     // Normalize manifest to objects with slug + optional images
@@ -931,8 +931,36 @@
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
+    const lb = document.getElementById("lightbox");
+    if (lb && lb.classList.contains("is-open")) {
+      lb.classList.remove("is-open");
+      lb.setAttribute("aria-hidden", "true");
+      return;
+    }
     document.querySelectorAll(".animal-detail.is-open").forEach(detailEl => {
       closeDetail(detailEl);
     });
   });
+
+  // ── Lightbox for story portraits ──
+  const lightbox = document.getElementById("lightbox");
+  if (lightbox) {
+    const lbImg = lightbox.querySelector(".lightbox__img");
+    document.addEventListener("click", (e) => {
+      const trigger = e.target.closest("[data-lightbox]");
+      if (trigger) {
+        e.preventDefault();
+        lbImg.src = trigger.dataset.lightbox;
+        lbImg.alt = trigger.alt || "";
+        lightbox.classList.add("is-open");
+        lightbox.setAttribute("aria-hidden", "false");
+      }
+    });
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox || e.target.classList.contains("lightbox__close")) {
+        lightbox.classList.remove("is-open");
+        lightbox.setAttribute("aria-hidden", "true");
+      }
+    });
+  }
 })();

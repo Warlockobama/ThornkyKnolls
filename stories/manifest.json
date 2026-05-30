@@ -37,7 +37,7 @@
     ]
   },
   {
-    "slug": "anabella",
+    "slug": "annabel",
     "type": "cattle",
     "images": [
       "images/optimized/Annabella-1600w.webp",
@@ -52,7 +52,7 @@
       "images/optimized/Annabella_front1-1600w.webp",
       "images/optimized/Annabella_front2.jpg-1600w.webp",
       {
-        "path": "images/optimized/LaBella\u0026Anabella1-1600w.webp",
+        "path": "images/optimized/LaBella&Anabella1-1600w.webp",
         "also": [
           "lebella"
         ]
@@ -70,7 +70,8 @@
       "images/optimized/PXL_20250721_130915936-1600w.webp",
       "images/optimized/PXL_20250721_130920910-1600w.webp",
       "images/optimized/PXL_20250721_130941536-1600w.webp",
-      "images/optimized/PXL_20251007_203944770-1600w.webp"
+      "images/optimized/PXL_20251007_203944770-1600w.webp",
+      "images/optimized/Annabel_newborn-1600w.webp"
     ]
   },
   {
@@ -114,31 +115,31 @@
         "path": "images/optimized/LaBella_Pumpkin_Anabella_christmastree-1600w.webp",
         "also": [
           "pumpkin",
-          "anabella"
+          "annabel"
         ]
       },
       {
-        "path": "images/optimized/LaBella\u0026Anabella1-1600w.webp",
+        "path": "images/optimized/LaBella&Anabella1-1600w.webp",
         "also": [
-          "anabella"
+          "annabel"
         ]
       },
       {
-        "path": "images/optimized/LaBella\u0026Anabella2-1600w.webp",
+        "path": "images/optimized/LaBella&Anabella2-1600w.webp",
         "also": [
-          "anabella"
+          "annabel"
         ]
       },
       {
-        "path": "images/optimized/LaBella\u0026Anabella3-1600w.webp",
+        "path": "images/optimized/LaBella&Anabella3-1600w.webp",
         "also": [
-          "anabella"
+          "annabel"
         ]
       },
       {
         "path": "images/optimized/Labella_side_hiddenAnabella-1600w.webp",
         "also": [
-          "anabella"
+          "annabel"
         ]
       },
       "images/optimized/PXL_20250428_182039240-1600w.webp",
@@ -196,10 +197,35 @@
     "slug": "first-snow",
     "type": "note",
     "animals": [
-      "anabella",
+      "annabel",
       "bull-calf",
       "pumpkin"
     ],
     "date": "2025-12-08"
+  },
+  {
+    "slug": "ness-of-thorny-knolls",
+    "type": "note",
+    "animals": [
+      "bull-calf",
+      "pumpkin"
+    ],
+    "date": "2026-05-23",
+    "images": [
+      "images/optimized/ness-of-thorny-knolls_0-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_1-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_2-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_3-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_4-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_5-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_6-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_7-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_8-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_9-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_10-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_11-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_12-1600w.jpg",
+      "images/optimized/ness-of-thorny-knolls_13-1600w.jpg"
+    ]
   }
 ]

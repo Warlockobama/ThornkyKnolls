@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>The Pasture – Thorny Knolls</title>
+  <meta name="description" content="Look out across Thorny Knolls in real time — a watercolor pasture where every animal roams with a mind of their own.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%90%84%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Abril+Fatface&family=Georgia&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #fbf6e9;
+      --paper-line: #e9dfc4;
+      --ink: #3a3128;
+      --ink-soft: #6b5e4a;
+      --grass-near: #6fae4a;
+      --grass-mid: #7fbb55;
+      --grass-far: #a6cf72;
+      --fence: #7b5a3c;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Patrick Hand', 'Georgia', cursive;
+    }
+    body {
+      min-height: 100vh;
+      background-image:
+        repeating-linear-gradient(0deg,
+          transparent 0,
+          transparent 27px,
+          rgba(168, 130, 90, 0.08) 27px,
+          rgba(168, 130, 90, 0.08) 28px),
+        radial-gradient(circle at 20% 10%, rgba(255,255,255,0.7), transparent 60%),
+        radial-gradient(circle at 80% 90%, rgba(204, 184, 130, 0.15), transparent 60%);
+    }
+
+    .font-hand { font-family: 'Patrick Hand', cursive; }
+    .font-story { font-family: 'Abril Fatface', serif; }
+    .font-book { font-family: 'Georgia', serif; }
+
+    /* ---------- page chrome ---------- */
+    .page-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1rem 3rem;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding-bottom: .75rem;
+      border-bottom: 2px dashed rgba(120, 100, 70, 0.3);
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .back-link {
+      font-family: 'Patrick Hand';
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      text-decoration: none;
+      padding: .2rem .5rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+    .back-link:hover {
+      background: rgba(120, 100, 70, 0.08);
+      color: var(--ink);
+    }
+    .page-title {
+      font-family: 'Abril Fatface';
+      font-size: 1.7rem;
+      letter-spacing: 0.5px;
+      color: var(--ink);
+      margin: 0;
+      text-align: center;
+      flex: 1;
+    }
+    .page-title .subtitle {
+      display: block;
+      font-family: 'Patrick Hand';
+      font-size: .85rem;
+      letter-spacing: 1px;
+      color: var(--ink-soft);
+      text-transform: lowercase;
+      margin-top: -2px;
+    }
+
+    /* about modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(40, 25, 15, .35);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-backdrop.on { display: flex; }
+    .modal {
+      background: var(--paper);
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+      padding: 1.25rem 1.5rem 1.25rem;
+      box-shadow: 0 12px 40px rgba(40, 25, 15, .35);
+      position: relative;
+      font-family: 'Patrick Hand';
+      color: var(--ink);
+      background-image: repeating-linear-gradient(0deg,
+        transparent 0,
+        transparent 25px,
+        rgba(168, 130, 90, 0.12) 25px,
+        rgba(168, 130, 90, 0.12) 26px);
+    }
+    .modal h2 {
+      font-family: 'Abril Fatface';
+      margin: 0 0 .5rem;
+      font-size: 1.4rem;
+    }
+    .modal p { margin: .35rem 0; font-size: 1rem; line-height: 1.5; }
+    .modal ul { margin: .4rem 0 .4rem 1rem; padding: 0; }
+    .modal li { font-size: 1rem; line-height: 1.5; }
+    .modal .close-modal {
+      position: absolute;
+      top: 8px; right: 12px;
+      background: none; border: 0;
+      font-family: 'Patrick Hand';
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-size: 1.4rem;
+    }
+    .time-weather {
+      font-family: 'Patrick Hand';
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      white-space: nowrap;
+    }
+    .time-weather .icon { font-size: 1.4rem; line-height: 1; }
+
+    /* ---------- caption strip (headline) ---------- */
+    .caption-strip {
+      text-align: center;
+      margin: 0 0 .75rem;
+      min-height: 1.6rem;
+    }
+    .caption-text {
+      display: inline-block;
+      font-family: 'Patrick Hand';
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+      font-style: italic;
+      padding: 0 1rem;
+      transition: opacity .8s;
+    }
+
+    /* ---------- main layout ---------- */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    @media (min-width: 980px) {
+      .main-grid {
+        grid-template-columns: minmax(0, 1fr) 280px;
+      }
+    }
+
+    /* ---------- stage (the pasture view) ---------- */
+    .stage-wrap {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow:
+        0 10px 30px rgba(60, 40, 20, .2),
+        inset 0 0 0 1px rgba(0,0,0,.05);
+      background: #cfe6a4;
+    }
+    .stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+
+    /* sky */
+    .sky {
+      position: absolute;
+      inset: 0;
+      transition: background 6s ease;
+      background: linear-gradient(to bottom, #aedcf3 0%, #d8e9d0 100%);
+    }
+    .sun-moon {
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      pointer-events: none;
+      transition: background .8s, box-shadow .8s, opacity .8s;
+      transform: translate(-50%, -50%);
+    }
+    .stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 4s;
+    }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: #fffce0;
+      box-shadow: 0 0 6px #fffce0;
+      animation: twinkle 4s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: .4; }
+      50%      { opacity: 1; }
+    }
+    .clouds { position: absolute; inset: 0; pointer-events: none; }
+    .cloud {
+      position: absolute;
+      font-size: 3rem;
+      opacity: .85;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,.08));
+      will-change: transform;
+      user-select: none;
+    }
+
+    /* rain */
+    .rain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 2s;
+    }
+    .rain.on { opacity: .55; }
+    .raindrop {
+      position: absolute;
+      width: 1.5px;
+      height: 12px;
+      background: linear-gradient(to bottom, transparent, rgba(180, 210, 230, .8));
+      animation: rainfall linear infinite;
+    }
+    @keyframes rainfall {
+      to { transform: translateY(110vh); }
+    }
+
+    /* hills behind the pasture */
+    .hills {
+      position: absolute;
+      left: -5%;
+      right: -5%;
+      bottom: 38%;
+      height: 28%;
+      background:
+        radial-gradient(ellipse 50% 80% at 20% 100%, var(--grass-far) 60%, transparent 62%),
+        radial-gradient(ellipse 55% 80% at 65% 100%, var(--grass-far) 60%, transparent 62%),
+        radial-gradient(ellipse 50% 90% at 90% 100%, var(--grass-far) 60%, transparent 62%);
+      opacity: .8;
+      pointer-events: none;
+    }
+
+    /* ground/pasture */
+    .ground {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 0;
+      height: 60%;
+      background: linear-gradient(to bottom,
+        var(--grass-far) 0%,
+        var(--grass-mid) 35%,
+        var(--grass-near) 100%);
+      overflow: visible;
+    }
+    .ground::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 10% 30%, rgba(255,255,255,.18) 1px, transparent 2px),
+        radial-gradient(circle at 60% 70%, rgba(0,0,0,.06) 1px, transparent 2px),
+        radial-gradient(circle at 30% 80%, rgba(255,255,255,.12) 1px, transparent 2px);
+      background-size: 60px 60px, 80px 80px, 100px 100px;
+      pointer-events: none;
+    }
+    .fence {
+      position: absolute;
+      left: 0; right: 0;
+      top: 8%;
+      height: 16px;
+      pointer-events: none;
+    }
+    .fence svg { width: 100%; height: 100%; display: block; }
+
+    /* vertical fence dividing the two paddocks */
+    .fence-divider {
+      position: absolute;
+      top: 6%;
+      bottom: 2%;
+      left: 50%;
+      width: 22px;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 5;
+    }
+    .fence-divider svg { width: 100%; height: 100%; display: block; }
+
+
+    .scenery {
+      position: absolute;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
+      user-select: none;
+      transform-origin: 50% 100%;
+    }
+    .scenery.tree-1 { left: 6%; top: 14%; font-size: 2.6rem; }
+    .scenery.tree-2 { right: 8%; top: 12%; font-size: 2rem; }
+    .scenery.bush-1 { left: 22%; top: 28%; font-size: 1.4rem; }
+    .scenery.bush-2 { right: 30%; top: 30%; font-size: 1.3rem; }
+    .scenery.thistle { right: 18%; top: 60%; font-size: 1rem; transform: rotate(-8deg); }
+
+    /* time-of-day tint overlay */
+    .time-tint {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      transition: background 6s ease, opacity 6s ease;
+      mix-blend-mode: multiply;
+      opacity: 0;
+    }
+
+    /* ---------- animal sprites ---------- */
+    .animal {
+      position: absolute;
+      left: 0;
+      top: 0;
+      will-change: transform;
+      transition: filter .4s;
+      cursor: pointer;
+      user-select: none;
+      pointer-events: auto;
+    }
+    .animal-inner {
+      position: relative;
+      transform-origin: 50% 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translate(-50%, -100%);
+    }
+    .animal-emoji {
+      line-height: 1;
+      display: block;
+      position: relative;
+      top: 0;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
+      transform-origin: 50% 100%;
+      transition: filter .3s;
+    }
+    .animal-emoji svg.sprite {
+      display: block;
+      width: 64px;
+      height: auto;
+      overflow: visible;
+    }
+    .animal.big  .animal-emoji svg.sprite { width: 82px; }
+    .animal.calf .animal-emoji svg.sprite { width: 46px; }
+    .animal-shadow {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 36px;
+      height: 8px;
+      background: radial-gradient(ellipse, rgba(0,0,0,.4), transparent 70%);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .animal.walking .animal-emoji {
+      animation: bob .35s ease-in-out infinite;
+    }
+    .animal.resting .animal-emoji {
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.25)) brightness(.92);
+      transform: translateY(2px) scaleY(.88);
+    }
+    .animal.posing .animal-emoji {
+      animation: pose 2.2s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%, 100% { top: 0; }
+      50%      { top: -3px; }
+    }
+    @keyframes pose {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50%      { transform: translateY(-1px) rotate(-2deg); }
+    }
+    .animal:hover .animal-emoji {
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)) brightness(1.08);
+    }
+    .animal.flipped .animal-emoji {
+      transform: scaleX(-1);
+    }
+    .animal-tag {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translate(-50%, -2px);
+      background: var(--paper);
+      border: 1px solid rgba(120, 100, 70, .3);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'Patrick Hand';
+      font-size: .8rem;
+      color: var(--ink);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity .25s;
+      pointer-events: none;
+      box-shadow: 0 1px 2px rgba(0,0,0,.1);
+    }
+    .animal:hover .animal-tag,
+    .animal.selected .animal-tag { opacity: 1; }
+
+    /* selected animal: subtle pen circle */
+    .animal.selected .animal-emoji {
+      animation: selected-bounce .5s ease;
+    }
+    @keyframes selected-bounce {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    /* speech bubble */
+    .bubble {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      background: var(--paper);
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 14px;
+      padding: 4px 10px;
+      font-family: 'Patrick Hand';
+      font-size: .9rem;
+      color: var(--ink);
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 1px 2px 0 rgba(0,0,0,.1);
+      opacity: 0;
+      animation: bubble-pop 3.6s ease forwards;
+      z-index: 100;
+    }
+    .bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--paper);
+      border-right: 1.5px solid var(--ink-soft);
+      border-bottom: 1.5px solid var(--ink-soft);
+      transform: translateX(-50%) rotate(45deg);
+    }
+    @keyframes bubble-pop {
+      0%   { opacity: 0; transform: translate(-50%, -90%) scale(.6); }
+      10%  { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+      85%  { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -105%) scale(.95); }
+    }
+
+    /* butterfly easter egg */
+    .butterfly {
+      position: absolute;
+      font-size: 1.4rem;
+      pointer-events: none;
+      will-change: transform;
+      animation: flutter .25s ease-in-out infinite;
+      z-index: 90;
+    }
+    @keyframes flutter {
+      0%, 100% { filter: brightness(1.0); }
+      50%      { filter: brightness(1.2); }
+    }
+
+    /* card popup when an animal is clicked */
+    .card-popup {
+      position: absolute;
+      max-width: 220px;
+      transform: translate(-50%, calc(-100% - 16px));
+      background: var(--paper);
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-family: 'Patrick Hand';
+      color: var(--ink);
+      box-shadow: 0 4px 14px rgba(0,0,0,.18);
+      z-index: 200;
+      animation: bubble-pop-card .25s ease forwards;
+    }
+    @keyframes bubble-pop-card {
+      from { opacity: 0; transform: translate(-50%, calc(-100% - 4px)); }
+      to   { opacity: 1; transform: translate(-50%, calc(-100% - 16px)); }
+    }
+    .card-popup h4 {
+      font-family: 'Abril Fatface';
+      font-size: 1.1rem;
+      margin: 0 0 .15rem;
+    }
+    .card-popup .species { color: var(--ink-soft); font-size: .85rem; }
+    .card-popup .doing { margin: .35rem 0 .5rem; font-style: italic; }
+    .card-popup .bio {
+      margin: 0 0 .35rem;
+      color: var(--ink-soft);
+      font-size: .92rem;
+    }
+    .card-popup a.profile-link {
+      display: inline-block;
+      color: #6b3a8a;
+      text-decoration: none;
+      font-size: .9rem;
+      border-bottom: 1px dashed #6b3a8a;
+    }
+    .card-popup a.profile-link:hover { color: #4e2766; }
+    .card-popup .close {
+      position: absolute;
+      top: 2px; right: 6px;
+      background: none; border: 0;
+      font-family: 'Patrick Hand';
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    /* ---------- journal sidebar ---------- */
+    .journal {
+      background: var(--paper);
+      border-radius: 12px;
+      padding: 1rem 1rem .75rem;
+      box-shadow:
+        inset 0 0 40px rgba(110, 80, 40, .08),
+        0 4px 14px rgba(80, 50, 20, .12);
+      position: relative;
+      max-height: 540px;
+      display: flex;
+      flex-direction: column;
+      background-image: repeating-linear-gradient(0deg,
+        transparent 0,
+        transparent 23px,
+        rgba(168, 130, 90, 0.15) 23px,
+        rgba(168, 130, 90, 0.15) 24px);
+    }
+    .journal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1.5px solid rgba(120, 100, 70, .25);
+      padding-bottom: .35rem;
+      margin-bottom: .5rem;
+    }
+    .journal h2 {
+      font-family: 'Abril Fatface';
+      font-size: 1.25rem;
+      margin: 0;
+      color: var(--ink);
+    }
+    .clear-btn {
+      background: none;
+      border: none;
+      font-family: 'Patrick Hand';
+      font-size: .9rem;
+      color: var(--ink-soft);
+      cursor: pointer;
+      padding: 0;
+    }
+    .clear-btn:hover { color: var(--ink); text-decoration: underline; }
+    .journal-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .journal-list li {
+      font-family: 'Patrick Hand';
+      font-size: .95rem;
+      color: var(--ink);
+      padding: .25rem 0;
+      border-bottom: 1px dotted rgba(120, 100, 70, .2);
+      line-height: 1.45;
+    }
+    .journal-list li .ts {
+      color: var(--ink-soft);
+      font-size: .85rem;
+      margin-right: .3rem;
+    }
+    .journal-list li .tag {
+      display: inline-block;
+      font-size: .7rem;
+      padding: 0 4px;
+      border-radius: 3px;
+      background: rgba(120, 100, 70, .12);
+      color: var(--ink-soft);
+      margin-right: .25rem;
+      vertical-align: middle;
+    }
+    .journal-tip {
+      font-size: .75rem;
+      color: var(--ink-soft);
+      text-align: center;
+      margin: .5rem 0 0;
+      font-style: italic;
+      opacity: .8;
+    }
+
+    /* ---------- legend / footer ---------- */
+    .legend {
+      margin-top: 1rem;
+      padding: .75rem 1rem;
+      text-align: center;
+      font-family: 'Patrick Hand';
+      font-size: .95rem;
+      color: var(--ink-soft);
+      background: rgba(255,255,255,.4);
+      border-radius: 8px;
+    }
+    .legend kbd {
+      font-family: 'Patrick Hand';
+      background: rgba(120, 100, 70, .12);
+      border: 1px solid rgba(120, 100, 70, .25);
+      border-radius: 3px;
+      padding: 0 5px;
+      font-size: .85rem;
+    }
+
+    /* ---------- barn / controls ---------- */
+    .barn {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: .6rem .9rem;
+      background: rgba(255,255,255,.5);
+      border: 1.5px solid rgba(120, 100, 70, .22);
+      border-radius: 10px;
+    }
+    .barn-left { display: flex; align-items: center; gap: 1rem; }
+    .barn-right { display: flex; align-items: center; gap: .6rem; }
+    .hay-counter {
+      font-family: 'Patrick Hand';
+      font-size: 1.15rem;
+      color: var(--ink);
+    }
+    .hay-counter strong { font-size: 1.3rem; }
+    .hay-counter.bump { animation: hay-bump .4s ease; }
+    @keyframes hay-bump {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.25); color: #b8860b; }
+      100% { transform: scale(1); }
+    }
+    .fed-stat { font-family: 'Patrick Hand'; font-size: 1rem; color: var(--ink-soft); }
+    .ctrl-btn {
+      font-family: 'Patrick Hand';
+      font-size: 1.02rem;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1.5px solid rgba(120, 100, 70, .4);
+      border-radius: 8px;
+      padding: .35rem .85rem;
+      cursor: pointer;
+      transition: all .15s;
+      box-shadow: 0 1px 0 rgba(0,0,0,.08);
+    }
+    .ctrl-btn:hover:not(:disabled) { background: #fff; transform: translateY(-1px); }
+    .ctrl-btn:active:not(:disabled) { transform: translateY(0); }
+    .ctrl-btn.primary {
+      background: #e9c46a;
+      border-color: #c99b3a;
+      color: #4a3415;
+    }
+    .ctrl-btn.primary:hover:not(:disabled) { background: #f0d07e; }
+    .ctrl-btn:disabled { opacity: .45; cursor: not-allowed; }
+    .ctrl-btn.armed {
+      background: #8fbf5a;
+      border-color: #5e8a32;
+      color: #28380f;
+      animation: armed-pulse 1.1s ease-in-out infinite;
+    }
+    @keyframes armed-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(120,170,70,.5); }
+      50%      { box-shadow: 0 0 0 6px rgba(120,170,70,0); }
+    }
+
+    /* drop-mode: aiming cursor over the stage */
+    .stage.drop-aim { cursor: crosshair; }
+    .stage.drop-aim .animal { cursor: crosshair; }
+
+    /* ---------- harvest mini-game ---------- */
+    .modal.harvest { max-width: 440px; text-align: center; }
+    .harvest-track {
+      position: relative;
+      height: 40px;
+      margin: 1rem 0 .5rem;
+      border-radius: 8px;
+      background: linear-gradient(#e7dcc0, #ddd0ad);
+      border: 1.5px solid rgba(120, 100, 70, .35);
+      overflow: hidden;
+    }
+    .harvest-zone {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .harvest-zone.outer { width: 46%; background: #c9d98e; }
+    .harvest-zone.mid   { width: 24%; background: #a7c75e; }
+    .harvest-zone.bull  { width: 8%;  background: #7faa3a; }
+    .harvest-marker {
+      position: absolute;
+      top: -4px; bottom: -4px;
+      left: 0;
+      width: 4px;
+      background: #7a3b1d;
+      box-shadow: 0 0 4px rgba(0,0,0,.4);
+      border-radius: 2px;
+    }
+    .harvest-result {
+      font-family: 'Patrick Hand';
+      font-size: 1.15rem;
+      min-height: 1.5rem;
+      color: var(--ink);
+    }
+    .harvest-actions { margin-top: .5rem; }
+
+    /* ---------- hay piles in the field ---------- */
+    .hay-pile {
+      position: absolute;
+      left: 0; top: 0;
+      pointer-events: none;
+      transform-origin: 50% 100%;
+      z-index: 1; /* below animals so they appear to stand over it */
+      will-change: transform;
+    }
+    .hay-pile svg { display: block; width: 46px; height: auto; overflow: visible; }
+    .hay-pile.spawn { animation: hay-drop .45s cubic-bezier(.3,1.4,.5,1); }
+    @keyframes hay-drop {
+      0%   { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .hay-pile.eaten { animation: hay-gone .6s ease forwards; }
+    @keyframes hay-gone {
+      to { opacity: 0; transform: translate(var(--hx), var(--hy)) scale(.4); }
+    }
+
+    /* respect reduced-motion: keep the world legible, drop the fidgety loops */
+    @media (prefers-reduced-motion: reduce) {
+      .star, .butterfly, .ctrl-btn.armed,
+      .animal.walking .animal-emoji,
+      .animal.posing .animal-emoji,
+      .raindrop {
+        animation: none !important;
+      }
+      .sky, .time-tint { transition: none !important; }
+      .hay-counter.bump { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="top-bar">
+      <a class="back-link" href="../test.html">← Back to the Storybook</a>
+      <h1 class="page-title">
+        The Pasture
+        <span class="subtitle">a small living world</span>
+      </h1>
+      <div class="time-weather" id="timeWeather">
+        <span class="icon" id="weatherIcon">☀️</span>
+        <span id="timeText">—</span>
+      </div>
+    </div>
+
+    <div class="caption-strip">
+      <p class="caption-text" id="captionText">Looking out across the field…</p>
+    </div>
+
+    <div class="main-grid">
+      <div class="stage-wrap">
+        <div class="stage" id="stage">
+          <div class="sky" id="sky">
+            <div class="sun-moon" id="sunMoon"></div>
+            <div class="stars" id="stars"></div>
+            <div class="clouds" id="clouds"></div>
+            <div class="rain" id="rain"></div>
+          </div>
+          <div class="hills"></div>
+          <div class="ground" id="ground">
+            <div class="fence">
+              <svg viewBox="0 0 1000 16" preserveAspectRatio="none">
+                <line x1="0" y1="6" x2="1000" y2="6" stroke="var(--fence)" stroke-width="2" />
+                <line x1="0" y1="13" x2="1000" y2="13" stroke="var(--fence)" stroke-width="1.5" />
+                <g stroke="var(--fence)" stroke-width="2">
+                  <line x1="40" y1="0" x2="40" y2="16" />
+                  <line x1="140" y1="0" x2="140" y2="16" />
+                  <line x1="240" y1="0" x2="240" y2="16" />
+                  <line x1="340" y1="0" x2="340" y2="16" />
+                  <line x1="440" y1="0" x2="440" y2="16" />
+                  <line x1="540" y1="0" x2="540" y2="16" />
+                  <line x1="640" y1="0" x2="640" y2="16" />
+                  <line x1="740" y1="0" x2="740" y2="16" />
+                  <line x1="840" y1="0" x2="840" y2="16" />
+                  <line x1="940" y1="0" x2="940" y2="16" />
+                </g>
+              </svg>
+            </div>
+            <!-- vertical fence splitting the two paddocks -->
+            <div class="fence-divider">
+              <svg viewBox="0 0 22 300" preserveAspectRatio="none">
+                <rect x="9" y="0" width="4" height="300" fill="var(--fence)"/>
+                <g stroke="var(--fence)" stroke-width="3">
+                  <line x1="2" y1="40"  x2="20" y2="40"/>
+                  <line x1="2" y1="120" x2="20" y2="120"/>
+                  <line x1="2" y1="200" x2="20" y2="200"/>
+                  <line x1="2" y1="280" x2="20" y2="280"/>
+                </g>
+              </svg>
+            </div>
+            <span class="scenery tree-1">🌳</span>
+            <span class="scenery tree-2">🌲</span>
+            <span class="scenery bush-1">🌿</span>
+            <span class="scenery bush-2">🌿</span>
+            <span class="scenery thistle">🌾</span>
+            <!-- animals injected here -->
+          </div>
+          <div class="time-tint" id="timeTint"></div>
+        </div>
+      </div>
+
+      <aside class="journal" id="journal">
+        <div class="journal-header">
+          <h2>Pasture Journal</h2>
+          <button class="clear-btn" id="clearJournal" title="Erase all journal entries">erase</button>
+        </div>
+        <ul class="journal-list" id="journalEntries"></ul>
+        <p class="journal-tip">moments persist between visits</p>
+      </aside>
+    </div>
+
+    <div class="barn">
+      <div class="barn-left">
+        <span class="hay-counter" title="Hay in your barn">🌾 <strong id="hayCount">0</strong> <span class="hay-label">hay</span></span>
+        <span class="fed-stat">fed <strong id="fedCount">0</strong>×</span>
+      </div>
+      <div class="barn-right">
+        <button id="harvestBtn" class="ctrl-btn">Harvest hay</button>
+        <button id="dropBtn" class="ctrl-btn primary" disabled>Drop hay</button>
+      </div>
+    </div>
+
+    <div class="legend" id="legend">
+      Hover an animal to peek at what they're up to · Click for their card · <strong>Harvest hay</strong>, then <strong>drop it</strong> in a field to feed the herd.
+    </div>
+  </div>
+
+  <!-- Harvest mini-game -->
+  <div class="modal-backdrop" id="harvestModal" role="dialog" aria-modal="true">
+    <div class="modal harvest">
+      <button class="close-modal" id="closeHarvest" aria-label="Close">×</button>
+      <h2>Harvest</h2>
+      <p id="harvestHint">Stop the scythe on the golden grass. The closer to the centre, the more hay you bale.</p>
+      <div class="harvest-track" id="harvestTrack">
+        <div class="harvest-zone outer"></div>
+        <div class="harvest-zone mid"></div>
+        <div class="harvest-zone bull"></div>
+        <div class="harvest-marker" id="harvestMarker"></div>
+      </div>
+      <div class="harvest-result" id="harvestResult">&nbsp;</div>
+      <div class="harvest-actions">
+        <button class="ctrl-btn primary" id="harvestAction">Swing!</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ===================== CONFIG =====================
+  const STAGE_REF_W = 1000; // virtual world width (matches SVG fence viewBox)
+  const STAGE_REF_H = 562;  // virtual world height (16:9 ratio of 1000)
+
+  // Animals roam in the ground plane (percent coords inside .ground).
+  // The field is split by a fence into two paddocks: cows on the left ("High
+  // Field"), donkeys + horses on the right ("Low Field"). Each animal is bounded
+  // to its own paddock's x-range; y-range is shared.
+  const Y_MIN = 24, Y_MAX = 88;
+  const PADDOCKS = {
+    high: { xMin: 5,  xMax: 45, label: 'The High Field' },  // cows
+    low:  { xMin: 55, xMax: 95, label: 'The Low Field' },   // donkeys & horses
+  };
+  const FENCE_X = 50; // percent — vertical divider
+
+  // ===================== ANIMAL DATA =====================
+  // kind drives the SVG silhouette; palette colors it.
+  const ANIMALS = [
+    { id: 'pumpkin',  name: 'Pumpkin',  species: 'Highland cow',      sound: 'cow', kind: 'cow', paddock: 'high',
+      bio: 'gentle and curious',
+      palette: { coat: '#c8803f', shade: '#a8632c', fringe: '#b06a2e', horn: '#e9d9b4', nose: '#5e4636' },
+      traits: { speed: 5,   restProb: .10, grazeProb: .55, wanderProb: .25, followProb: .10, vocalEvery: 90 } },
+    { id: 'lebella',  name: 'Lebella',  species: 'Highland matriarch', sound: 'cow', kind: 'cow', paddock: 'high',
+      bio: 'protective matriarch',
+      palette: { coat: '#8a4f2e', shade: '#6c3c21', fringe: '#743f22', horn: '#e3d2ab', nose: '#483124' },
+      traits: { speed: 4.5, restProb: .08, grazeProb: .25, wanderProb: .12, followProb: .55, followTarget: 'anabella', vocalEvery: 70 } },
+    { id: 'anabella', name: 'Anabella', species: 'Highland calf',     sound: 'cow', kind: 'cow', paddock: 'high', cssClass: 'calf',
+      bio: 'young and playful',
+      palette: { coat: '#e7c89a', shade: '#d3af7c', fringe: '#d6b685', horn: '#efe3c4', nose: '#7a5c45' },
+      traits: { speed: 9,   restProb: .04, grazeProb: .15, wanderProb: .70, followProb: .11, vocalEvery: 35, playful: true } },
+    { id: 'smoke',    name: 'Smoke',    species: 'Highland cow',      sound: 'cow', kind: 'cow', paddock: 'high',
+      bio: 'calm and photogenic',
+      palette: { coat: '#9d9c95', shade: '#7e7d75', fringe: '#87867d', horn: '#e0dcc8', nose: '#52504a' },
+      traits: { speed: 3.6, restProb: .18, grazeProb: .30, wanderProb: .25, followProb: .05, poseProb: .22, vocalEvery: 110 } },
+    { id: 'raider',   name: 'Raider',   species: 'Highland bull',     sound: 'cow', kind: 'cow', paddock: 'high', cssClass: 'big',
+      bio: 'adventurous',
+      palette: { coat: '#3d3933', shade: '#2a2722', fringe: '#2f2c27', horn: '#d9cdb0', nose: '#1c1a17' },
+      traits: { speed: 6.2, restProb: .05, grazeProb: .20, wanderProb: .30, followProb: .05, adventureProb: .40, vocalEvery: 85 } },
+
+    { id: 'dobby',    name: 'Dobby',    species: 'Mini donkey',       sound: 'donkey', kind: 'donkey', paddock: 'low', cssClass: 'calf',
+      bio: 'vocal and affectionate',
+      palette: { coat: '#b1aaa0', shade: '#938c82', belly: '#d9d3c9', muzzle: '#ddd7cd', mane: '#6b6359' },
+      traits: { speed: 6,   restProb: .05, grazeProb: .25, wanderProb: .25, followProb: .45, vocalEvery: 18 } },
+    { id: 'argus',    name: 'Argus',    species: 'Standard donkey',   sound: 'donkey', kind: 'donkey', paddock: 'low',
+      bio: 'quiet observer',
+      palette: { coat: '#958676', shade: '#776a5b', belly: '#c2b6a4', muzzle: '#cabfae', mane: '#5e5043' },
+      traits: { speed: 3,   restProb: .60, grazeProb: .28, wanderProb: .10, followProb: .02, vocalEvery: 220 } },
+    { id: 'sega',     name: 'Sega',     species: 'Mammoth donkey',    sound: 'donkey', kind: 'donkey', paddock: 'low', cssClass: 'big',
+      bio: 'gentle giant',
+      palette: { coat: '#6f685d', shade: '#534d44', belly: '#9a9286', muzzle: '#a7a094', mane: '#46413a' },
+      traits: { speed: 2.8, restProb: .30, grazeProb: .50, wanderProb: .15, followProb: .05, vocalEvery: 170 } },
+    { id: 'willow',   name: 'Willow',   species: 'Mule',              sound: 'horse', kind: 'mule', paddock: 'low',
+      bio: 'intelligent and stubborn',
+      palette: { coat: '#7c5a3a', shade: '#5e4329', belly: '#b79a76', muzzle: '#c2a784', mane: '#3f2e1d' },
+      traits: { speed: 5.5, restProb: .12, grazeProb: .28, wanderProb: .25, followProb: .05, stubbornProb: .30, vocalEvery: 130 } },
+    { id: 'hugo',     name: 'Hugo',     species: 'Draft horse',       sound: 'horse', kind: 'horse', paddock: 'low', cssClass: 'big',
+      bio: 'playful helper',
+      palette: { coat: '#9a5731', shade: '#7a431f', belly: '#c98b5c', muzzle: '#b87a4d', mane: '#caa06a' },
+      traits: { speed: 7,   restProb: .04, grazeProb: .18, wanderProb: .18, followProb: .60, vocalEvery: 55 } },
+  ];
+
+  const VOICE = {
+    cow:    ["Moo.", "Mooo!", "Mrrrr…", "*chews thoughtfully*", "Mm.", "Mrooo.", "Moooooo."],
+    donkey: ["Hee-haw!", "Bray!", "*nibbles a thistle*", "Hee!", "*ears swivel*", "Awoo?"],
+    horse:  ["Neigh.", "*snort*", "*shakes mane*", "Whinny!", "*paws ground*"],
+  };
+
+  const SPECIAL_LINES = {
+    lebella_far:      ["Anabella! Stay close.", "Where's that calf?", "*moos for her calf*"],
+    anabella_play:    ["Wheee!", "*bounces*", "Tag!", "*kicks up heels*"],
+    hugo_greet:       ["Hello there.", "*nuzzles*", "Mind if I join you?", "*friendly snort*"],
+    raider_fence:     ["I wonder what's out there…", "*stares at horizon*", "One day…", "*sniffs the wind*"],
+    smoke_pose:       ["*strikes a pose*", "Photogenic moment.", "*holds perfectly still*"],
+    willow_stop:      ["Not moving.", "Nope.", "Hmph.", "*plants all four feet*"],
+    dobby_attn:       ["Look at me!", "Listen!", "Pay attention to ME.", "I have OPINIONS.", "Hello, hello!"],
+    pumpkin_curious:  ["Oh? What's that?", "*sniffs*", "Curious…"],
+    sega_calm:        ["Mmm.", "*slow breath*", "A peaceful day."],
+    argus_obs:        ["*observes silently*", "Mm-hmm.", "Indeed."],
+  };
+
+  // ===================== SPRITES (hand-drawn SVG, face right) =====================
+  // viewBox is 0 0 100 78; feet sit near y=72 so transform-origin 50% 100% anchors
+  // the sprite on the ground. Each builder takes the animal's palette.
+  function spriteFor(a) {
+    const p = a.palette;
+    const body =
+      a.kind === 'cow'    ? cowSprite(p)
+    : a.kind === 'horse'  ? equineSprite(p, { ears: 'short', mane: 'flow', tail: 'flow', heavy: true })
+    : a.kind === 'mule'   ? equineSprite(p, { ears: 'long',  mane: 'short', tail: 'flow', heavy: false })
+    :                       equineSprite(p, { ears: 'long',  mane: 'short', tail: 'tuft', heavy: false }); // donkey
+    return `<svg class="sprite" viewBox="0 0 100 78" xmlns="http://www.w3.org/2000/svg">${body}</svg>`;
+  }
+
+  // Highland cow — shaggy coat, long fringe over the eyes, wide curving horns.
+  // Body is a single solid shape (fully covers the rump); fur is added on top so
+  // it can never carve transparent gaps into the silhouette.
+  function cowSprite(p) {
+    return `
+      <g stroke="rgba(0,0,0,.18)" stroke-width="1.2" stroke-linejoin="round">
+        <!-- tail -->
+        <path d="M15 40 q-7 7 -5 17" fill="none" stroke="${p.shade}" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M9 55 q0 6 3 8 q3 -2 3 -8 q-3 -2 -6 0z" fill="${p.shade}" stroke="none"/>
+        <!-- back legs -->
+        <rect x="25" y="49" width="9" height="23" rx="4" fill="${p.shade}"/>
+        <rect x="55" y="49" width="9" height="23" rx="4" fill="${p.shade}"/>
+        <!-- solid body (covers full rump) -->
+        <path d="M13 44
+                 C 11 26 30 23 45 23
+                 C 62 23 78 27 80 41
+                 C 81 51 72 56 58 56
+                 L 29 56
+                 C 17 56 11 53 13 44 Z" fill="${p.coat}"/>
+        <!-- shaggy belly tufts (additive sawtooth, no gaps) -->
+        <path d="M18 55 l3 6 l3 -6 l3 6 l3 -6 l3 6 l3 -6 l3 6 l3 -6 l3 6 l3 -6 l3 6 l3 -6 l3 6 l3 -6 z"
+              fill="${p.coat}" stroke="none"/>
+        <!-- front legs -->
+        <rect x="34" y="51" width="9" height="21" rx="4" fill="${p.coat}"/>
+        <rect x="63" y="51" width="9" height="21" rx="4" fill="${p.coat}"/>
+        <!-- fur texture on the rump -->
+        <path d="M22 33 q3 6 0 13 M30 30 q3 7 0 15 M38 30 q3 7 0 15 M47 31 q3 6 0 13"
+              fill="none" stroke="${p.shade}" stroke-width="1" opacity=".45"/>
+        <!-- head -->
+        <ellipse cx="80" cy="40" rx="14" ry="13" fill="${p.coat}"/>
+        <!-- horns -->
+        <path d="M72 31 q-12 -7 -10 -17 q5 -2 6 3 q-1 7 8 10z" fill="${p.horn}"/>
+        <path d="M88 31 q12 -7 10 -17 q-5 -2 -6 3 q1 7 -8 10z" fill="${p.horn}"/>
+        <!-- long fringe over face -->
+        <path d="M68 30 q12 -7 25 0
+                 l-1 9 q-1 5 -3 0 q-2 6 -4 1 q-2 6 -4 1 q-2 6 -4 1 q-2 5 -4 0
+                 q-2 5 -3 -1z" fill="${p.fringe}"/>
+        <!-- muzzle -->
+        <ellipse cx="91" cy="44" rx="6" ry="5" fill="${p.nose}"/>
+        <circle cx="89" cy="44" r="1" fill="rgba(0,0,0,.5)" stroke="none"/>
+        <circle cx="93" cy="44" r="1" fill="rgba(0,0,0,.5)" stroke="none"/>
+        <!-- ear peeking -->
+        <path d="M67 33 q-6 -1 -8 3 q4 3 9 1z" fill="${p.shade}"/>
+      </g>`;
+  }
+
+  // Donkeys / mules / horses share a silhouette; options vary ears, mane and tail.
+  function equineSprite(p, o) {
+    const belly = p.belly || p.shade;
+    const muzzle = p.muzzle || p.shade;
+    const mane = p.mane || p.shade;
+
+    // ears
+    const ears = o.ears === 'long'
+      ? `<path d="M79 22 q-5 -19 -1 -21 q5 -1 5 6 l-1 14z" fill="${p.coat}"/>
+         <path d="M88 22 q3 -19 8 -19 q4 1 1 8 l-4 13z" fill="${p.coat}"/>`
+      : `<path d="M80 20 q-2 -11 2 -12 q4 0 3 7 l-2 7z" fill="${p.coat}"/>
+         <path d="M89 20 q3 -11 7 -10 q3 1 -1 8 l-3 5z" fill="${p.coat}"/>`;
+
+    // tail
+    const tail = o.tail === 'flow'
+      ? `<path d="M14 38 q-9 6 -10 24 q5 -1 6 -6 q3 8 6 2 q1 -10 4 -16z" fill="${mane}"/>`
+      : `<path d="M15 40 q-6 6 -5 16" fill="none" stroke="${mane}" stroke-width="3" stroke-linecap="round"/>
+         <path d="M8 54 q0 7 3 9 q3 -2 3 -9 q-3 -2 -6 0z" fill="${mane}"/>`;
+
+    // mane along the neck
+    const maneShape = o.mane === 'flow'
+      ? `<path d="M70 24 q9 -8 18 -6 q-2 5 -7 6 q-5 1 -11 4z" fill="${mane}"/>`
+      : `<path d="M72 26 q8 -5 16 -4 q-3 4 -7 4 q-5 0 -9 2z" fill="${mane}"/>`;
+
+    const bodyW = o.heavy ? 'M16 44 q0 -18 26 -18 l20 0 q16 0 18 16 q1 9 -7 13 q-30 6 -54 0 q-5 -3 -3 -11z'
+                          : 'M18 44 q0 -16 24 -16 l18 0 q14 0 16 14 q1 8 -7 12 q-27 6 -49 0 q-4 -3 -2 -10z';
+
+    return `
+      <g stroke="rgba(0,0,0,.18)" stroke-width="1.2" stroke-linejoin="round">
+        ${tail}
+        <!-- back legs -->
+        <rect x="26" y="50" width="8" height="22" rx="3.5" fill="${p.shade}"/>
+        <rect x="56" y="50" width="8" height="22" rx="3.5" fill="${p.shade}"/>
+        <!-- front legs -->
+        <rect x="35" y="52" width="8" height="20" rx="3.5" fill="${p.coat}"/>
+        <rect x="64" y="52" width="8" height="20" rx="3.5" fill="${p.coat}"/>
+        <!-- body -->
+        <path d="${bodyW}" fill="${p.coat}"/>
+        <!-- belly highlight -->
+        <path d="M24 52 q22 7 46 0 q-3 6 -23 7 q-18 -1 -23 -7z" fill="${belly}" opacity=".55" stroke="none"/>
+        <!-- neck + head -->
+        <path d="M70 40 q3 -18 16 -19 q9 0 10 7 q1 6 -3 9 l-2 8 q-2 7 -11 7 q-12 0 -14 -7z" fill="${p.coat}"/>
+        ${maneShape}
+        <!-- muzzle -->
+        <ellipse cx="93" cy="34" rx="6" ry="7" fill="${muzzle}"/>
+        <circle cx="94" cy="31" r="1.1" fill="rgba(0,0,0,.55)" stroke="none"/>
+        <circle cx="94" cy="37" r="1.1" fill="rgba(0,0,0,.55)" stroke="none"/>
+        ${ears}
+        <!-- eye -->
+        <circle cx="84" cy="31" r="1.8" fill="rgba(20,15,10,.85)" stroke="none"/>
+      </g>`;
+  }
+
+  // a little pile of hay
+  function haySprite() {
+    return `
+      <svg viewBox="0 0 48 30" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="24" cy="27" rx="18" ry="3.5" fill="rgba(0,0,0,.18)"/>
+        <path d="M5 25 q1 -17 19 -17 q18 0 19 17 q-19 5 -38 0z" fill="#dcb24c" stroke="rgba(120,80,20,.35)" stroke-width="1"/>
+        <g stroke="#b58a2c" stroke-width="1" stroke-linecap="round" opacity=".8">
+          <line x1="12" y1="22" x2="18" y2="11"/>
+          <line x1="20" y1="24" x2="23" y2="10"/>
+          <line x1="28" y1="24" x2="26" y2="10"/>
+          <line x1="36" y1="22" x2="30" y2="12"/>
+          <line x1="16" y1="23" x2="14" y2="15"/>
+          <line x1="33" y1="23" x2="35" y2="15"/>
+        </g>
+        <path d="M2 24 q3 4 9 3 M46 24 q-3 4 -9 3" fill="none" stroke="#caa23e" stroke-width="2" stroke-linecap="round"/>
+      </svg>`;
+  }
+
+  // ===================== UTIL =====================
+  const $ = (id) => document.getElementById(id);
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const choice = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+
+  // seeded RNG (mulberry32) for date-based weather
+  function makeSeededRng(seed) {
+    let t = seed >>> 0;
+    return function() {
+      t = (t + 0x6D2B79F5) >>> 0;
+      let r = t;
+      r = Math.imul(r ^ (r >>> 15), r | 1);
+      r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function dateSeed(d) {
+    return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  }
+
+  function formatTime(d) {
+    let h = d.getHours();
+    const m = d.getMinutes();
+    const ampm = h >= 12 ? 'pm' : 'am';
+    if (h === 0) h = 12;
+    else if (h > 12) h -= 12;
+    return `${h}:${m.toString().padStart(2, '0')}${ampm}`;
+  }
+
+  function timeOfDayLabel(hour) {
+    if (hour < 5)  return 'late night';
+    if (hour < 7)  return 'dawn';
+    if (hour < 11) return 'morning';
+    if (hour < 14) return 'midday';
+    if (hour < 17) return 'afternoon';
+    if (hour < 19) return 'dusk';
+    if (hour < 22) return 'evening';
+    return 'night';
+  }
+
+  // ===================== WORLD STATE =====================
+  const state = {
+    animals: [],
+    bubbles: [],
+    butterfly: null,
+    time: 0,
+    weather: null,
+    lastBubbleSweep: 0,
+    lastHeadlineTime: -1e9,
+    lastSkyUpdate: -1e9,
+    lastSpecialEventHour: -1,
+    selectedId: null,
+    // ----- feeding game -----
+    hay: 0,
+    fed: 0,
+    hayPiles: [],
+    dropMode: false,
+  };
+
+  // happy noises while eating
+  const MUNCH = {
+    cow:    ["Nom.", "*munches*", "Mmmm.", "*happy moo*", "*chews hay*"],
+    donkey: ["Nom nom!", "*chomps*", "Hee! Hay!", "*munches happily*"],
+    horse:  ["*crunch*", "*swishes tail*", "Mmm, hay.", "*content snort*"],
+  };
+
+  // ===================== WEATHER (date-deterministic) =====================
+  function decideWeather() {
+    const now = new Date();
+    const seed = dateSeed(now);
+    const rng = makeSeededRng(seed);
+    const r = rng();
+    let kind;
+    if      (r < 0.55) kind = 'sunny';
+    else if (r < 0.82) kind = 'partlycloudy';
+    else if (r < 0.95) kind = 'cloudy';
+    else               kind = 'rainy';
+
+    // also: how many clouds, wind speed, etc.
+    const cloudCount = kind === 'sunny' ? 2
+                      : kind === 'partlycloudy' ? 5
+                      : kind === 'cloudy' ? 8
+                      : 6;
+    const windSpeed = 8 + rng() * 14; // px per second
+    const rainy = kind === 'rainy';
+    return { kind, cloudCount, windSpeed, rainy, rng };
+  }
+
+  function weatherIcon(kind) {
+    return ({ sunny: '☀️', partlycloudy: '⛅', cloudy: '☁️', rainy: '🌧️' })[kind] || '☀️';
+  }
+
+  function weatherLabel(kind) {
+    return ({ sunny: 'clear skies', partlycloudy: 'partly cloudy', cloudy: 'overcast', rainy: 'gentle rain' })[kind];
+  }
+
+  // ===================== SKY / TIME OF DAY =====================
+  function skyGradientForHour(h) {
+    // Smooth interpolation between named anchor points
+    const anchors = [
+      { h: 0,  top: '#0a1228', bot: '#1c2a4a' },     // deep night
+      { h: 5,  top: '#1a2950', bot: '#3a3960' },     // pre-dawn
+      { h: 6.5,top: '#f7b8a3', bot: '#fadcb8' },     // dawn
+      { h: 9,  top: '#90cdec', bot: '#d6e9c8' },     // morning
+      { h: 13, top: '#a0d8f5', bot: '#dceac8' },     // midday
+      { h: 17, top: '#9ec9e8', bot: '#e0d7a8' },     // afternoon
+      { h: 18.5,top: '#e88a55', bot: '#f4cb88' },    // dusk
+      { h: 20, top: '#4a3268', bot: '#7d5b88' },     // evening
+      { h: 22, top: '#1a234a', bot: '#2c2c5a' },     // late evening
+      { h: 24, top: '#0a1228', bot: '#1c2a4a' },     // night
+    ];
+    let a = anchors[0], b = anchors[anchors.length - 1];
+    for (let i = 0; i < anchors.length - 1; i++) {
+      if (h >= anchors[i].h && h <= anchors[i+1].h) {
+        a = anchors[i]; b = anchors[i+1]; break;
+      }
+    }
+    const t = (h - a.h) / (b.h - a.h || 1);
+    const top = lerpColor(a.top, b.top, t);
+    const bot = lerpColor(a.bot, b.bot, t);
+    return `linear-gradient(to bottom, ${top} 0%, ${bot} 100%)`;
+  }
+
+  function hex(s) {
+    s = s.replace('#','');
+    return [parseInt(s.slice(0,2),16), parseInt(s.slice(2,4),16), parseInt(s.slice(4,6),16)];
+  }
+  function lerpColor(a, b, t) {
+    const A = hex(a), B = hex(b);
+    const r = Math.round(A[0] + (B[0] - A[0]) * t);
+    const g = Math.round(A[1] + (B[1] - A[1]) * t);
+    const bl = Math.round(A[2] + (B[2] - A[2]) * t);
+    return `rgb(${r}, ${g}, ${bl})`;
+  }
+
+  function sunMoonForHour(h) {
+    // Sun visible 6 → 19; moon otherwise. Position is an arc across sky.
+    let phase, isSun;
+    if (h >= 6 && h <= 19) {
+      isSun = true;
+      phase = (h - 6) / 13; // 0..1
+    } else {
+      isSun = false;
+      let hMoon = h < 6 ? h + 24 : h; // map 19..30
+      phase = (hMoon - 19) / 11;
+    }
+    // arc: x linear 8% → 92%, y dips like sine
+    const x = 8 + phase * 84;
+    const y = 18 + (1 - Math.sin(phase * Math.PI)) * 38; // higher in middle
+    return { x, y, isSun };
+  }
+
+  function updateSky(d) {
+    const h = d.getHours() + d.getMinutes() / 60;
+    const sky = $('sky');
+    sky.style.background = skyGradientForHour(h);
+
+    const sm = sunMoonForHour(h);
+    const node = $('sunMoon');
+    node.style.left = sm.x + '%';
+    node.style.top  = sm.y + '%';
+    if (sm.isSun) {
+      node.style.background = 'radial-gradient(circle at 35% 35%, #fff6a8, #ffd757 60%, #f6a52a 100%)';
+      node.style.boxShadow = '0 0 30px rgba(255, 211, 100, .6), 0 0 60px rgba(255, 180, 60, .3)';
+    } else {
+      node.style.background = 'radial-gradient(circle at 35% 35%, #f6f6f0, #d5d5c0 70%, #a8a890 100%)';
+      node.style.boxShadow = '0 0 24px rgba(220, 220, 230, .5)';
+    }
+
+    // stars at night
+    const starsVisible = (h < 5.5) || (h > 20);
+    $('stars').style.opacity = starsVisible ? '1' : '0';
+
+    // gentle global tint via overlay (warm at dusk, cool at night)
+    const tint = $('timeTint');
+    if (h >= 17 && h <= 19) {
+      tint.style.opacity = '.18';
+      tint.style.background = 'linear-gradient(to bottom, rgba(248, 150, 80, .3), rgba(200, 90, 50, .15))';
+    } else if (h >= 20 || h < 6) {
+      tint.style.opacity = '.35';
+      tint.style.background = 'linear-gradient(to bottom, rgba(20, 30, 70, .5), rgba(30, 30, 80, .3))';
+    } else {
+      tint.style.opacity = '0';
+    }
+  }
+
+  function makeStars() {
+    const stars = $('stars');
+    const rng = makeSeededRng(98765);
+    let html = '';
+    for (let i = 0; i < 60; i++) {
+      const x = rng() * 100;
+      const y = rng() * 50;
+      const delay = rng() * 4;
+      html += `<span class="star" style="left:${x}%; top:${y}%; animation-delay:${delay}s"></span>`;
+    }
+    stars.innerHTML = html;
+  }
+
+  // ===================== CLOUDS =====================
+  function makeClouds() {
+    const w = state.weather;
+    const container = $('clouds');
+    container.innerHTML = '';
+    const cloudGlyphs = ['☁️', '☁️', '☁️', '🌥️'];
+    for (let i = 0; i < w.cloudCount; i++) {
+      const x = w.rng() * 120 - 10;
+      const y = 5 + w.rng() * 28;
+      const scale = .8 + w.rng() * .8;
+      const drift = (w.windSpeed * (.6 + w.rng() * .8)) * (w.rng() < .5 ? -1 : 1);
+      const node = document.createElement('div');
+      node.className = 'cloud';
+      node.textContent = choice(cloudGlyphs);
+      node.style.left = x + '%';
+      node.style.top  = y + '%';
+      node.style.fontSize = (1.6 * scale) + 'rem';
+      node._x = x;
+      node._drift = drift / 100; // % per second
+      container.appendChild(node);
+    }
+  }
+
+  function updateClouds(dt) {
+    const container = $('clouds');
+    for (const node of container.children) {
+      node._x += node._drift * dt;
+      if (node._x > 115) node._x = -15;
+      if (node._x < -15) node._x = 115;
+      node.style.left = node._x + '%';
+    }
+  }
+
+  function makeRain() {
+    const rain = $('rain');
+    if (!state.weather.rainy) {
+      rain.classList.remove('on');
+      rain.innerHTML = '';
+      return;
+    }
+    let html = '';
+    for (let i = 0; i < 60; i++) {
+      const x = Math.random() * 100;
+      const dur = 0.6 + Math.random() * 0.6;
+      const delay = Math.random() * 1.2;
+      const y = -Math.random() * 50;
+      html += `<span class="raindrop" style="left:${x}%; top:${y}%; animation-duration:${dur}s; animation-delay:${delay}s"></span>`;
+    }
+    rain.innerHTML = html;
+    rain.classList.add('on');
+  }
+
+  // ===================== ANIMAL INIT =====================
+  function initAnimals() {
+    const ground = $('ground');
+    // track how many animals already placed per paddock for an even spread
+    const placed = { high: 0, low: 0 };
+    state.animals = ANIMALS.map((a) => {
+      const bounds = PADDOCKS[a.paddock];
+      const n = placed[a.paddock]++;
+      // stagger within the paddock: alternate near/far rows
+      const span = bounds.xMax - bounds.xMin;
+      const x = bounds.xMin + 6 + (n % 3) * (span / 3) + (Math.random() * 6 - 3);
+      const y = 36 + (n % 2) * 26 + Math.floor(n / 2) * 8 + (Math.random() * 8 - 4);
+
+      const el = document.createElement('div');
+      el.className = 'animal' + (a.cssClass ? ' ' + a.cssClass : '');
+      el.dataset.id = a.id;
+      el.innerHTML = `
+        <div class="animal-inner">
+          <span class="animal-tag">${a.name}</span>
+          <span class="animal-emoji">${spriteFor(a)}</span>
+          <span class="animal-shadow"></span>
+        </div>
+      `;
+      el.addEventListener('click', (e) => {
+        if (state.dropMode) return; // let the ground handle the hay drop
+        e.stopPropagation();
+        selectAnimal(a.id);
+      });
+      ground.appendChild(el);
+
+      return {
+        ...a,
+        bounds,
+        x: clamp(x, bounds.xMin, bounds.xMax),
+        y: clamp(y, Y_MIN, Y_MAX),
+        vx: 0, vy: 0,
+        target: null,
+        behavior: 'graze',
+        stateTime: 0,
+        stateDuration: rand(3, 8),
+        facingLeft: false,
+        lastVocalAt: -1e9,
+        el,
+      };
+    });
+    placeAnimals();
+  }
+
+  function placeAnimals() {
+    for (const a of state.animals) updateAnimalDom(a, true);
+  }
+
+  function updateAnimalDom(a, force) {
+    const ground = $('ground');
+    const gw = ground.clientWidth, gh = ground.clientHeight;
+    const px = (a.x / 100) * gw;
+    const py = (a.y / 100) * gh;
+    // depth scale: bigger toward bottom
+    const depthT = (a.y - Y_MIN) / (Y_MAX - Y_MIN);
+    const scale = 0.6 + clamp(depthT, 0, 1) * 0.7;
+    a.el.style.transform = `translate(${px}px, ${py}px) scale(${scale})`;
+    a.el.style.zIndex = String(1000 + Math.floor(a.y * 10));
+    a.el.classList.toggle('flipped', a.facingLeft);
+    const movingToHay = a.behavior === 'feed' && !a.eating;
+    a.el.classList.toggle('walking', movingToHay || a.behavior === 'wander' || a.behavior === 'follow' || a.behavior === 'adventure');
+    a.el.classList.toggle('resting', a.behavior === 'rest' || (a.behavior === 'feed' && a.eating));
+    a.el.classList.toggle('posing', a.behavior === 'pose');
+  }
+
+  // ===================== BEHAVIOR =====================
+  function pickBehavior(a) {
+    const t = a.traits;
+    // special quirks first
+    if (t.stubbornProb && Math.random() < t.stubbornProb * 0.4) return 'stubborn';
+    if (t.poseProb && Math.random() < t.poseProb * 0.5) return 'pose';
+    if (t.adventureProb && Math.random() < t.adventureProb * 0.5) return 'adventure';
+
+    const slots = [
+      ['graze',  t.grazeProb],
+      ['wander', t.wanderProb],
+      ['follow', t.followProb],
+      ['rest',   t.restProb],
+    ];
+    const total = slots.reduce((s, [_, p]) => s + p, 0);
+    let r = Math.random() * total;
+    for (const [name, p] of slots) {
+      if ((r -= p) <= 0) return name;
+    }
+    return 'graze';
+  }
+
+  function setBehavior(a, b) {
+    a.behavior = b;
+    a.stateTime = 0;
+    a.target = null;
+
+    if (b === 'graze')    { a.stateDuration = rand(6, 14); }
+    else if (b === 'rest'){ a.stateDuration = rand(14, 30); }
+    else if (b === 'pose'){ a.stateDuration = rand(5, 10); }
+    else if (b === 'stubborn') { a.stateDuration = rand(5, 12); }
+    else if (b === 'wander') {
+      a.stateDuration = rand(8, 16);
+      a.target = { x: rand(a.bounds.xMin, a.bounds.xMax), y: rand(Y_MIN, Y_MAX) };
+    }
+    else if (b === 'follow') {
+      a.stateDuration = rand(7, 14);
+      // only follow pasture-mates (same paddock)
+      const others = state.animals.filter(o => o.id !== a.id && o.paddock === a.paddock);
+      let target;
+      if (a.traits.followTarget) {
+        target = state.animals.find(o => o.id === a.traits.followTarget) || choice(others);
+      } else {
+        target = others.length ? choice(others) : null;
+      }
+      if (!target) { setBehavior(a, 'graze'); return; }
+      a.followingId = target.id;
+      a.target = { x: clamp(target.x + rand(-6, 6), a.bounds.xMin, a.bounds.xMax),
+                   y: clamp(target.y + rand(-4, 4), Y_MIN, Y_MAX) };
+    }
+    else if (b === 'adventure') {
+      a.stateDuration = rand(10, 18);
+      // head for the outer edge of the paddock (the world beyond the fence)
+      const side = a.paddock === 'high' ? a.bounds.xMin + 2 : a.bounds.xMax - 2;
+      a.target = { x: side, y: rand(Y_MIN + 4, Y_MIN + 20) };
+    }
+  }
+
+  function tickAnimal(a, dt) {
+    a.stateTime += dt;
+
+    // ----- feeding takes priority over everything and is "sticky" -----
+    if (a.behavior === 'feed') {
+      const pile = state.hayPiles.find(p => p.id === a.feedingPileId && p.servings > 0);
+      if (!pile) { a.feedingPileId = null; setBehavior(a, 'graze'); return; }
+      const dx = pile.x - a.x, dy = (pile.y - 1) - a.y;
+      const d = Math.hypot(dx, dy);
+      if (d < 2.4) {
+        // reached the hay — eat
+        a.eating = true;
+        a.eatTimer = (a.eatTimer || 0) + dt;
+        if (a.eatTimer > 1.1) consumeHay(a, pile);
+      } else {
+        a.eating = false;
+        const nx = dx / d, ny = dy / d;
+        a.facingLeft = nx < 0;
+        const sp = a.traits.speed * 1.15; // a little eager
+        a.x = clamp(a.x + nx * sp * dt, a.bounds.xMin, a.bounds.xMax);
+        a.y = clamp(a.y + ny * sp * dt, Y_MIN, Y_MAX);
+      }
+      maybeVocalize(a);
+      updateAnimalDom(a);
+      return;
+    }
+
+    // re-target follow each second so they track
+    if (a.behavior === 'follow' && a.followingId) {
+      const target = state.animals.find(o => o.id === a.followingId);
+      if (target) {
+        a.target = { x: clamp(target.x + 4, a.bounds.xMin, a.bounds.xMax),
+                     y: clamp(target.y - 1, Y_MIN, Y_MAX) };
+      }
+    }
+
+    if (a.stateTime >= a.stateDuration) {
+      const next = pickBehavior(a);
+      setBehavior(a, next);
+      return;
+    }
+
+    if (a.target && (a.behavior === 'wander' || a.behavior === 'follow' || a.behavior === 'adventure')) {
+      const dx = a.target.x - a.x;
+      const dy = a.target.y - a.y;
+      const d = Math.hypot(dx, dy);
+      if (d < 1.2) {
+        // arrived
+        if (a.behavior === 'wander') setBehavior(a, 'graze');
+        else if (a.behavior === 'follow') {
+          maybeGreetOnArrival(a);
+          setBehavior(a, 'graze');
+        }
+        else if (a.behavior === 'adventure') {
+          maybeAdventureLine(a);
+          // stand at fence for a bit
+          a.target = null;
+        }
+      } else {
+        const nx = dx / d, ny = dy / d;
+        a.facingLeft = nx < 0;
+        const sp = a.traits.speed;
+        a.x += nx * sp * dt;
+        a.y += ny * sp * dt;
+        a.x = clamp(a.x, a.bounds.xMin, a.bounds.xMax);
+        a.y = clamp(a.y, Y_MIN, Y_MAX);
+      }
+    }
+
+    maybeVocalize(a);
+    updateAnimalDom(a);
+  }
+
+  function maybeGreetOnArrival(a) {
+    if (a.id === 'hugo') {
+      emitSpeech(a, choice(SPECIAL_LINES.hugo_greet));
+    } else if (a.id === 'lebella') {
+      emitSpeech(a, choice(VOICE[a.sound]));
+    } else if (a.id === 'dobby') {
+      emitSpeech(a, choice(SPECIAL_LINES.dobby_attn));
+    }
+  }
+
+  function maybeAdventureLine(a) {
+    if (a.id === 'raider') emitSpeech(a, choice(SPECIAL_LINES.raider_fence));
+  }
+
+  function maybeVocalize(a) {
+    const interval = a.traits.vocalEvery;
+    if (state.time - a.lastVocalAt < interval) return;
+    // probabilistic gate so vocalization isn't on a strict timer
+    if (Math.random() < 0.012) {
+      a.lastVocalAt = state.time;
+      const line = pickLine(a);
+      emitSpeech(a, line);
+    }
+  }
+
+  function pickLine(a) {
+    // context-aware special lines
+    if (a.id === 'lebella') {
+      const ana = state.animals.find(o => o.id === 'anabella');
+      if (ana && dist(a.x, a.y, ana.x, ana.y) > 35) {
+        return choice(SPECIAL_LINES.lebella_far);
+      }
+    }
+    if (a.id === 'anabella' && Math.random() < 0.4) return choice(SPECIAL_LINES.anabella_play);
+    if (a.id === 'smoke' && a.behavior === 'pose') return choice(SPECIAL_LINES.smoke_pose);
+    if (a.id === 'willow' && a.behavior === 'stubborn') return choice(SPECIAL_LINES.willow_stop);
+    if (a.id === 'dobby' && Math.random() < 0.5) return choice(SPECIAL_LINES.dobby_attn);
+    if (a.id === 'argus' && Math.random() < 0.5) return choice(SPECIAL_LINES.argus_obs);
+    if (a.id === 'sega' && Math.random() < 0.5) return choice(SPECIAL_LINES.sega_calm);
+    if (a.id === 'pumpkin' && Math.random() < 0.5) return choice(SPECIAL_LINES.pumpkin_curious);
+    if (a.id === 'raider' && Math.random() < 0.5) return choice(SPECIAL_LINES.raider_fence);
+    return choice(VOICE[a.sound]);
+  }
+
+  // ===================== SPEECH BUBBLES =====================
+  function emitSpeech(a, text) {
+    const ground = $('ground');
+    const node = document.createElement('div');
+    node.className = 'bubble';
+    node.textContent = text;
+    ground.appendChild(node);
+    const px = (a.x / 100) * ground.clientWidth;
+    const py = (a.y / 100) * ground.clientHeight - 48;
+    node.style.left = px + 'px';
+    node.style.top  = py + 'px';
+    setTimeout(() => node.remove(), 3700);
+
+    // sometimes log to journal (the more interesting lines)
+    if (text.startsWith('*') || text.length > 14 || a.id === 'lebella' || a.id === 'raider') {
+      addJournal({ type: 'said', who: a.name, what: text });
+    }
+  }
+
+  // ===================== INTERACTIONS =====================
+  // Per-pair cooldown so a single huddle doesn't spam the journal. A pair must
+  // drift apart (> 9 units) and stay quiet for a while before it logs again.
+  const meetCooldown = {};   // pairKey -> time when logging is allowed again
+  const meetApart = {};      // pairKey -> have they separated since last meet?
+
+  function detectInteractions() {
+    const a = state.animals;
+    for (let i = 0; i < a.length; i++) {
+      for (let j = i+1; j < a.length; j++) {
+        const A = a[i], B = a[j];
+        if (A.paddock !== B.paddock) continue; // a fence is between them
+        const key = A.id < B.id ? A.id + '|' + B.id : B.id + '|' + A.id;
+        const d = dist(A.x, A.y, B.x, B.y);
+
+        if (d > 9) { meetApart[key] = true; continue; }
+        if (d < 4 && meetApart[key] && state.time > (meetCooldown[key] || 0)) {
+          if (Math.random() < 0.02) {
+            addJournal({ type: 'meet', who: A.name, what: B.name });
+            meetCooldown[key] = state.time + 60; // at least a minute between logs
+            meetApart[key] = false;
+          }
+        }
+      }
+    }
+  }
+
+  // ===================== BUTTERFLY EASTER EGG =====================
+  function maybeSpawnButterfly() {
+    if (state.butterfly) return;
+    if (Math.random() > 0.0008) return; // ~once every 20 minutes ideally
+    const ground = $('ground');
+    const node = document.createElement('div');
+    node.className = 'butterfly';
+    node.textContent = '🦋';
+    ground.appendChild(node);
+    state.butterfly = {
+      x: 2, y: rand(Y_MIN + 4, Y_MIN + 20),
+      vx: rand(3, 5), vy: 0,
+      lifetime: 0,
+      el: node,
+    };
+    addJournal({ type: 'sight', who: 'A butterfly', what: 'drifted into the pasture' });
+  }
+
+  function tickButterfly(dt) {
+    const b = state.butterfly;
+    if (!b) return;
+    b.lifetime += dt;
+    b.x += b.vx * dt;
+    b.y += Math.sin(b.lifetime * 2.5) * 8 * dt;
+    b.y = clamp(b.y, Y_MIN, Y_MIN + 25);
+    if (b.x > 98) {
+      b.el.remove();
+      state.butterfly = null;
+      return;
+    }
+    const ground = $('ground');
+    b.el.style.transform = `translate(${(b.x/100)*ground.clientWidth}px, ${(b.y/100)*ground.clientHeight}px)`;
+  }
+
+  // ===================== FEEDING GAME =====================
+  const BARN_KEY = 'pasture.barn.v1';
+  let pileSeq = 0;
+
+  function loadBarn() {
+    try {
+      const raw = localStorage.getItem(BARN_KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        state.hay = Math.max(0, d.hay | 0);
+        state.fed = Math.max(0, d.fed | 0);
+      }
+    } catch (e) {}
+    // give first-time visitors a couple of bales so they can feed straight away
+    if (state.hay === 0 && state.fed === 0) state.hay = 2;
+    saveBarn();
+    updateBarnUI();
+  }
+  function saveBarn() {
+    try { localStorage.setItem(BARN_KEY, JSON.stringify({ hay: state.hay, fed: state.fed })); } catch (e) {}
+  }
+  function updateBarnUI() {
+    $('hayCount').textContent = state.hay;
+    $('fedCount').textContent = state.fed;
+    const dropBtn = $('dropBtn');
+    dropBtn.disabled = state.hay <= 0 && !state.dropMode;
+    dropBtn.classList.toggle('armed', state.dropMode);
+    dropBtn.textContent = state.dropMode ? 'Click a field…' : 'Drop hay';
+  }
+  function addHay(n) {
+    state.hay = Math.max(0, state.hay + n);
+    saveBarn();
+    if (n > 0) {
+      const c = document.querySelector('.hay-counter');
+      c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
+    }
+    updateBarnUI();
+  }
+
+  function enterDropMode() {
+    if (state.hay <= 0) return;
+    state.dropMode = true;
+    $('stage').classList.add('drop-aim');
+    updateBarnUI();
+  }
+  function exitDropMode() {
+    state.dropMode = false;
+    $('stage').classList.remove('drop-aim');
+    updateBarnUI();
+  }
+
+  function dropHay(xPct, yPct) {
+    if (state.hay <= 0) return;
+    addHay(-1);
+    const paddock = xPct < FENCE_X ? 'high' : 'low';
+    // keep it inside the paddock so animals can actually reach it
+    const b = PADDOCKS[paddock];
+    const x = clamp(xPct, b.xMin + 2, b.xMax - 2);
+    const y = clamp(yPct, Y_MIN + 4, Y_MAX - 2);
+
+    const ground = $('ground');
+    const node = document.createElement('div');
+    node.className = 'hay-pile spawn';
+    node.innerHTML = haySprite();
+    ground.appendChild(node);
+
+    const pile = { id: ++pileSeq, x, y, paddock, servings: 3, el: node };
+    state.hayPiles.push(pile);
+    positionPile(pile);
+
+    // call the nearest few pasture-mates over to eat
+    const mates = state.animals
+      .filter(a => a.paddock === paddock && a.behavior !== 'feed')
+      .sort((m, n) => dist(m.x, m.y, x, y) - dist(n.x, n.y, x, y))
+      .slice(0, 3);
+    for (const a of mates) {
+      a.behavior = 'feed';
+      a.feedingPileId = pile.id;
+      a.eatTimer = 0;
+      a.eating = false;
+    }
+    if (mates[0]) emitSpeech(mates[0], 'Hay!');
+    addJournal({ type: 'feed', who: 'You', what: `dropped hay in ${b.label}` });
+  }
+
+  function positionPile(pile) {
+    const ground = $('ground');
+    const px = (pile.x / 100) * ground.clientWidth;
+    const py = (pile.y / 100) * ground.clientHeight;
+    pile.el.style.setProperty('--hx', px + 'px');
+    pile.el.style.setProperty('--hy', py + 'px');
+    // depth scale to match animals
+    const depthT = (pile.y - Y_MIN) / (Y_MAX - Y_MIN);
+    const scale = 0.6 + clamp(depthT, 0, 1) * 0.7;
+    pile.el.style.transform = `translate(${px}px, ${py}px) translate(-50%, -100%) scale(${scale})`;
+  }
+
+  function consumeHay(a, pile) {
+    a.eatTimer = 0;
+    pile.servings--;
+    state.fed++;
+    saveBarn();
+    updateBarnUI();
+    emitSpeech(a, choice(MUNCH[a.sound]));
+    addJournal({ type: 'feed', who: a.name, what: 'tucked into the hay' });
+
+    if (pile.servings <= 0) {
+      pile.el.classList.add('eaten');
+      setTimeout(() => pile.el.remove(), 600);
+      state.hayPiles = state.hayPiles.filter(p => p !== pile);
+      // anyone still heading for this pile gives up contentedly
+      for (const o of state.animals) {
+        if (o.feedingPileId === pile.id) { o.feedingPileId = null; setBehavior(o, 'graze'); }
+      }
+    }
+    // this animal wanders off happy
+    a.feedingPileId = null;
+    a.eating = false;
+    setBehavior(a, Math.random() < .5 ? 'rest' : 'graze');
+  }
+
+  // ----- Harvest mini-game: stop the scythe on the golden grass -----
+  const harvest = { raf: 0, t: 0, pos: 0, dir: 1, running: false, swung: false };
+
+  function openHarvest() {
+    $('harvestModal').classList.add('on');
+    harvest.swung = false;
+    $('harvestResult').innerHTML = '&nbsp;';
+    $('harvestAction').textContent = 'Swing!';
+    $('harvestHint').textContent = 'Stop the scythe on the golden grass. The closer to the centre, the more hay you bale.';
+    startHarvestMarker();
+  }
+  function closeHarvest() {
+    $('harvestModal').classList.remove('on');
+    stopHarvestMarker();
+  }
+  function startHarvestMarker() {
+    harvest.running = true;
+    harvest.t = 0;
+    const track = $('harvestTrack');
+    const marker = $('harvestMarker');
+    let last = performance.now();
+    const step = (now) => {
+      if (!harvest.running) return;
+      const dt = (now - last) / 1000; last = now;
+      harvest.t += dt;
+      // oscillate 0..1 with a sine for smooth ease at the edges
+      harvest.pos = (Math.sin(harvest.t * 3.2) + 1) / 2;
+      const w = track.clientWidth;
+      marker.style.left = (harvest.pos * (w - 4)) + 'px';
+      harvest.raf = requestAnimationFrame(step);
+    };
+    harvest.raf = requestAnimationFrame(step);
+  }
+  function stopHarvestMarker() {
+    harvest.running = false;
+    if (harvest.raf) cancelAnimationFrame(harvest.raf);
+  }
+  function swingScythe() {
+    if (harvest.swung) { // play again
+      openHarvest();
+      return;
+    }
+    stopHarvestMarker();
+    harvest.swung = true;
+    const offset = Math.abs(harvest.pos - 0.5); // 0 = dead centre
+    let hay, msg;
+    if (offset <= 0.04)      { hay = 3; msg = 'Bullseye! +3 hay 🌾🌾🌾'; }
+    else if (offset <= 0.12) { hay = 2; msg = 'Nice swing! +2 hay 🌾🌾'; }
+    else if (offset <= 0.23) { hay = 1; msg = 'Got a little. +1 hay 🌾'; }
+    else                     { hay = 0; msg = 'Missed the grass — no hay.'; }
+    if (hay > 0) addHay(hay);
+    $('harvestResult').textContent = msg;
+    $('harvestAction').textContent = 'Again';
+    $('harvestHint').textContent = hay > 0
+      ? 'Close the panel and press “Drop hay” to feed the herd.'
+      : 'Try again — time your swing for the centre.';
+  }
+
+  // ===================== HEADLINE GENERATOR =====================
+  function regenerateHeadline() {
+    const counts = {};
+    for (const a of state.animals) counts[a.behavior] = (counts[a.behavior] || 0) + 1;
+    const h = new Date().getHours();
+    const tod = timeOfDayLabel(h);
+    const weather = state.weather.kind;
+
+    const lebella = state.animals.find(x => x.id === 'lebella');
+    const anabella = state.animals.find(x => x.id === 'anabella');
+    const lebellaFar = lebella && anabella && dist(lebella.x, lebella.y, anabella.x, anabella.y) > 30;
+    const raider = state.animals.find(x => x.id === 'raider');
+    const dobby = state.animals.find(x => x.id === 'dobby');
+    const smoke = state.animals.find(x => x.id === 'smoke');
+
+    const options = [];
+
+    if (lebellaFar) options.push(`Lebella is calling across the field for Anabella.`);
+    if (raider && raider.behavior === 'adventure') options.push(`Raider is at the fence again, sizing up the horizon.`);
+    if (smoke && smoke.behavior === 'pose') options.push(`Smoke is holding a pose — Highland glamour shot in progress.`);
+    if (dobby && dobby.behavior === 'follow') options.push(`Dobby is shadowing someone, no doubt with commentary.`);
+    if ((counts.graze || 0) >= 6) options.push(`A quiet ${tod} — most of the herd is grazing under ${weatherLabel(weather)}.`);
+    if ((counts.rest || 0) >= 4) options.push(`Half the pasture is dozing in the ${tod} ${weather === 'rainy' ? 'rain' : 'air'}.`);
+    if ((counts.wander || 0) >= 4) options.push(`Everyone's on the move this ${tod}.`);
+    if (counts.adventure) options.push(`Adventure brewing along the fence line.`);
+
+    // time-of-day flavor
+    if (h >= 5 && h < 7) options.push(`Dawn over Thorny Knolls — the field is waking up.`);
+    if (h === 12 || h === 13) options.push(`High noon. Long shadows take a break.`);
+    if (h >= 17 && h < 19) options.push(`Long golden light across the pasture.`);
+    if (h >= 21 || h < 5) options.push(`The pasture is quiet — most of the herd is settled in for the night.`);
+
+    if (!options.length) options.push(`A regular ${tod} at Thorny Knolls.`);
+    const txt = choice(options);
+    const cap = $('captionText');
+    cap.style.opacity = '0';
+    setTimeout(() => {
+      cap.textContent = txt;
+      cap.style.opacity = '1';
+    }, 400);
+  }
+
+  // ===================== TIME & WEATHER UI =====================
+  function updateTimeWeatherUI() {
+    const now = new Date();
+    $('timeText').textContent = `${formatTime(now)} · ${weatherLabel(state.weather.kind)}`;
+    $('weatherIcon').textContent = weatherIcon(state.weather.kind);
+  }
+
+  // ===================== HIGH-NOON / MIDNIGHT EVENTS =====================
+  function maybeTimeOfDayEvent() {
+    const h = new Date().getHours();
+    if (h === state.lastSpecialEventHour) return;
+    if (h === 5 || h === 6) {
+      addJournal({ type: 'time', who: 'Dawn', what: 'spreads slowly across the field.' });
+      state.lastSpecialEventHour = h;
+    } else if (h === 12) {
+      addJournal({ type: 'time', who: 'High noon', what: 'over Thorny Knolls.' });
+      state.lastSpecialEventHour = h;
+    } else if (h === 18) {
+      addJournal({ type: 'time', who: 'Dusk', what: 'paints the pasture gold.' });
+      state.lastSpecialEventHour = h;
+    } else if (h === 22) {
+      addJournal({ type: 'time', who: 'Evening', what: 'settles in. Most of the herd is calm.' });
+      state.lastSpecialEventHour = h;
+    } else if (h === 0) {
+      addJournal({ type: 'time', who: 'Midnight', what: 'arrives quietly.' });
+      state.lastSpecialEventHour = h;
+    }
+  }
+
+  // ===================== JOURNAL =====================
+  const JOURNAL_KEY = 'thornyknolls.pasture.journal.v1';
+  const MAX_ENTRIES = 50;
+  let journal = [];
+
+  function loadJournal() {
+    try {
+      const raw = localStorage.getItem(JOURNAL_KEY);
+      journal = raw ? JSON.parse(raw) : [];
+    } catch (e) { journal = []; }
+
+    if (journal.length === 0) {
+      const now = new Date();
+      addJournal({
+        type: 'welcome',
+        who: 'Welcome',
+        what: 'first visit to the pasture. moments will be saved here.',
+        ts: now.toISOString(),
+      });
+    }
+    renderJournal();
+  }
+
+  function addJournal(entry) {
+    const e = {
+      type: entry.type || 'note',
+      who: entry.who,
+      what: entry.what,
+      ts: entry.ts || new Date().toISOString(),
+    };
+    journal.unshift(e);
+    if (journal.length > MAX_ENTRIES) journal.length = MAX_ENTRIES;
+    try { localStorage.setItem(JOURNAL_KEY, JSON.stringify(journal)); } catch (err) {}
+    renderJournal();
+  }
+
+  function renderJournal() {
+    const list = $('journalEntries');
+    list.innerHTML = '';
+    for (const e of journal) {
+      const li = document.createElement('li');
+      const d = new Date(e.ts);
+      const ts = formatTime(d);
+      let html = `<span class="ts">${ts}</span>`;
+      const tagLabel = ({
+        said: 'said', meet: 'met', sight: 'sight',
+        time: 'time', welcome: '★', click: 'note', feed: '🌾',
+      })[e.type] || 'note';
+      html += `<span class="tag">${tagLabel}</span>`;
+      if (e.type === 'said')      html += `<strong>${e.who}:</strong> ${escapeHtml(e.what)}`;
+      else if (e.type === 'meet') html += `<strong>${e.who}</strong> crossed paths with <strong>${e.what}</strong>`;
+      else if (e.type === 'sight') html += `${e.who} ${e.what}`;
+      else if (e.type === 'time') html += `<em>${e.who}</em> — ${e.what}`;
+      else if (e.type === 'click') html += `paid attention to <strong>${e.who}</strong> (${e.what})`;
+      else if (e.type === 'feed') html += `<strong>${e.who}</strong> ${escapeHtml(e.what)}`;
+      else                         html += `<strong>${e.who}:</strong> ${escapeHtml(e.what)}`;
+      li.innerHTML = html;
+      list.appendChild(li);
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+
+  // ===================== ANIMAL CLICK / CARD POPUP =====================
+  let cardEl = null;
+  function closeCard() {
+    if (cardEl) { cardEl.remove(); cardEl = null; }
+    if (state.selectedId) {
+      const a = state.animals.find(x => x.id === state.selectedId);
+      if (a) a.el.classList.remove('selected');
+      state.selectedId = null;
+    }
+  }
+  function selectAnimal(id) {
+    closeCard();
+    const a = state.animals.find(x => x.id === id);
+    if (!a) return;
+    state.selectedId = id;
+    a.el.classList.add('selected');
+
+    const ground = $('ground');
+    cardEl = document.createElement('div');
+    cardEl.className = 'card-popup';
+    cardEl.innerHTML = `
+      <button class="close" title="close">×</button>
+      <h4>${a.name}</h4>
+      <div class="species">${a.species}</div>
+      <p class="bio">${a.bio}</p>
+      <p class="doing">${describeBehavior(a)}</p>
+      <a class="profile-link" href="../animals/${a.id}/index.html">→ Visit ${a.name}'s page</a>
+    `;
+    cardEl.querySelector('.close').addEventListener('click', closeCard);
+    ground.appendChild(cardEl);
+    positionCard();
+
+    const stateLabel = describeBehavior(a).replace(/^[A-Z]/, c => c.toLowerCase());
+    addJournal({ type: 'click', who: a.name, what: stateLabel });
+  }
+  function positionCard() {
+    if (!cardEl || !state.selectedId) return;
+    const a = state.animals.find(x => x.id === state.selectedId);
+    if (!a) return;
+    const ground = $('ground');
+    const gw = ground.clientWidth, gh = ground.clientHeight;
+    const px = (a.x / 100) * gw;
+    const py = (a.y / 100) * gh;
+    cardEl.style.left = clamp(px, 110, gw - 110) + 'px';
+    cardEl.style.top  = py + 'px';
+  }
+
+  function describeBehavior(a) {
+    switch (a.behavior) {
+      case 'graze':     return 'Grazing peacefully.';
+      case 'wander':    return 'Wandering across the pasture.';
+      case 'follow':    {
+        const f = state.animals.find(o => o.id === a.followingId);
+        return f ? `Following ${f.name}.` : 'On the move.';
+      }
+      case 'rest':      return 'Resting.';
+      case 'pose':      return 'Standing perfectly still — posing.';
+      case 'stubborn':  return 'Refusing to move.';
+      case 'adventure': return 'Sizing up the world beyond the fence.';
+      case 'feed':      return a.eating ? 'Tucking into some hay.' : 'Heading for the hay.';
+      default:          return 'Standing around.';
+    }
+  }
+
+  // close card on outside click
+  document.addEventListener('click', (e) => {
+    if (cardEl && !cardEl.contains(e.target) && !e.target.closest('.animal')) {
+      closeCard();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeCard();
+  });
+
+  // ===================== MAIN LOOP =====================
+  let lastT = 0;
+  function loop(t) {
+    if (!lastT) lastT = t;
+    const dt = Math.min(0.1, (t - lastT) / 1000);
+    lastT = t;
+
+    if (!document.hidden) {
+      state.time += dt;
+      // sky changes slowly — recompute every few seconds, not every frame
+      // (recomputing each frame fights its own 6s CSS transition and wastes work)
+      if (state.time - state.lastSkyUpdate > 8) {
+        updateSky(new Date());
+        state.lastSkyUpdate = state.time;
+      }
+      updateClouds(dt);
+      for (const a of state.animals) tickAnimal(a, dt);
+      tickButterfly(dt);
+      detectInteractions();
+      maybeSpawnButterfly();
+      maybeTimeOfDayEvent();
+      positionCard();
+
+      // headline cadence: every 22 seconds
+      if (state.time - state.lastHeadlineTime > 22) {
+        regenerateHeadline();
+        state.lastHeadlineTime = state.time;
+      }
+      // refresh time UI once a second
+      if (Math.floor(state.time) !== Math.floor(state.time - dt)) {
+        updateTimeWeatherUI();
+      }
+    }
+
+    requestAnimationFrame(loop);
+  }
+
+  // ===================== INIT =====================
+  function init() {
+    state.weather = decideWeather();
+    makeStars();
+    makeClouds();
+    makeRain();
+    updateSky(new Date());
+    initAnimals();
+    loadJournal();
+    loadBarn();
+    updateTimeWeatherUI();
+    regenerateHeadline();
+
+    // re-place animals + hay on resize
+    window.addEventListener('resize', () => {
+      for (const a of state.animals) updateAnimalDom(a, true);
+      for (const p of state.hayPiles) positionPile(p);
+      positionCard();
+    });
+
+    // ----- feeding game wiring -----
+    $('harvestBtn').addEventListener('click', openHarvest);
+    $('closeHarvest').addEventListener('click', closeHarvest);
+    $('harvestAction').addEventListener('click', swingScythe);
+    $('harvestModal').addEventListener('click', (e) => {
+      if (e.target === $('harvestModal')) closeHarvest();
+    });
+
+    $('dropBtn').addEventListener('click', () => {
+      if (state.dropMode) exitDropMode();
+      else enterDropMode();
+    });
+    // click a spot in the field to drop hay
+    $('ground').addEventListener('click', (e) => {
+      if (!state.dropMode) return;
+      const rect = $('ground').getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width * 100;
+      const y = (e.clientY - rect.top) / rect.height * 100;
+      dropHay(x, y);
+      exitDropMode();
+      e.stopPropagation();
+    });
+
+    $('clearJournal').addEventListener('click', () => {
+      if (confirm('Erase all pasture journal entries?')) {
+        journal = [];
+        try { localStorage.removeItem(JOURNAL_KEY); } catch (e) {}
+        addJournal({ type: 'welcome', who: 'Cleared', what: 'starting a fresh journal.' });
+      }
+    });
+
+    // escape closes the harvest panel / cancels hay-drop mode
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if ($('harvestModal').classList.contains('on')) closeHarvest();
+      else if (state.dropMode) exitDropMode();
+    });
+
+    requestAnimationFrame(loop);
+  }
+
+  // wait for fonts + DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  </script>
+</body>
+</html>

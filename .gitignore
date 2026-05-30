@@ -4,3 +4,7 @@ thornyknolls
 .env
 stories/images/
 .claude/
+drafts/**/*.jpg
+drafts/**/*.jpeg
+drafts/**/*.png
+drafts/**/*.webp

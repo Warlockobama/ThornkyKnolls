@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+scripts/check-secrets.sh
+scripts/check-journal-drafts.sh
+scripts/check-content.sh
+
